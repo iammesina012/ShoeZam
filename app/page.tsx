@@ -20,8 +20,8 @@ export default function Home() {
 
       <main>
         <section className="px-12 py-8">
-          <div className="flex min-h-[450px] items-center justify-between gap-12 rounded-3xl bg-[#E8E8E8] px-25">
-            <div className="max-w-xl border-2 border-blue-500">
+          <div className="flex min-h-[450px] items-center justify-between rounded-3xl bg-[#E8E8E8] px-25">
+            <div className="max-w-xl">
               <p className="text-3xl font-bold text-[#9C2327]">NEW ARRIVAL!</p>
 
               <h1 className="mt-4 text-5xl font-bold text-black">Vans Old Skool LX Comme Des Garcons</h1>
@@ -36,7 +36,7 @@ export default function Home() {
               </button>
             </div>
 
-            <div className="relative flex items-center justify-center border-2 border-blue-500">
+            <div className="relative flex items-center justify-center">
               <div className="absolute h-[380px] w-[380px] rounded-full bg-[#9C2327]" />
 
               <Image

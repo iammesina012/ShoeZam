@@ -2,112 +2,145 @@
 
 ---
 
-## Layout (Flexbox)
+## Layout
 
-| Class | What it does |
-|---|---|
-| `flex` | Turns element into a flex container — lines up children side by side (row, by default) |
-| `flex-col` | Changes flex direction to stack children top-to-bottom instead of side by side |
-| `flex-1` | Makes this element grow to fill all remaining space in its flex container |
-| `items-center` | Centers children along the **cross axis** (vertical, in a row; horizontal, in a column) |
-| `justify-center` | Centers children along the **main axis** (horizontal, in a row; vertical, in a column) |
-| `justify-between` | Pushes children to opposite ends, with equal space between them |
-| `gap-2` | Adds space *between* flex children (no need for manual margins) |
-| `self-center` | Overrides alignment for **one specific child**, instead of all children (like `items-center` but individual) |
-
----
-
-## Sizing
-
-| Class | What it does |
-|---|---|
-| `w-full` | Width = 100% of the parent |
-| `w-1/2` | Width = 50% of the parent |
-| `max-w-sm` | Caps max width at a small preset size |
-| `max-w-xs` | Caps max width at an extra-small preset size |
-| `max-w-6xl` | Caps max width at a large preset size (good for whole-page containers) |
-| `min-h-screen` | Minimum height = full height of the browser window |
-| `h-96` | Fixed height (used temporarily, before content decided real height) |
+| Class             | Simple meaning                    |
+| ----------------- | --------------------------------- |
+| `flex`            | Places children in a row          |
+| `flex-col`        | Stacks children vertically        |
+| `flex-1`          | Fills available space             |
+| `items-center`    | Centers children vertically       |
+| `justify-center`  | Centers children horizontally     |
+| `justify-between` | Pushes children to opposite sides |
+| `gap-2`           | Adds space between children       |
+| `self-center`     | Centers one child                 |
 
 ---
 
-## Spacing (Margin & Padding)
+## Width and Height
 
-| Class | What it does |
-|---|---|
-| `p-4`, `p-8` | Padding on **all sides** |
-| `pl-14` | Padding on the **left** side only |
-| `pr-4` | Padding on the **right** side only |
-| `mt-5`, `mt-10` | Margin on the **top** only |
-| `mx-auto` | Margin left + right set to `auto` — centers a block horizontally (needs a max-width to work) |
-
----
-
-## Borders & Shape
-
-| Class | What it does |
-|---|---|
-| `border` | Adds a default 1px border on all sides |
-| `border-gray-400` | Sets the border's color |
-| `border-t` | Border on the **top** side only (used to fake a horizontal divider line) |
-| `rounded-lg` | Rounded corners (medium) |
-| `rounded-3xl` | Rounded corners (very rounded, used for the card) |
-| `shadow-lg` | Adds a drop shadow (the "floating card" look) |
+| Class           | Simple meaning                      |
+| --------------- | ----------------------------------- |
+| `w-full`        | Uses the full parent width          |
+| `w-1/2`         | Uses half the parent width          |
+| `w-3/5`         | Uses 60% of the parent width        |
+| `w-[550px]`     | Sets width to exactly 550px         |
+| `max-w-xl`      | Prevents content becoming too wide  |
+| `h-[400px]`     | Sets height to exactly 400px        |
+| `min-h-[450px]` | Minimum height is 450px             |
+| `min-h-screen`  | Minimum height is the screen height |
+| `h-auto`        | Height adjusts automatically        |
 
 ---
 
-## Typography
+## Spacing
 
-| Class | What it does |
-|---|---|
-| `text-sm`, `text-lg`, `text-xl`, `text-2xl`, `text-3xl`, `text-4xl` | Font size — gets bigger as the name goes up the scale |
-| `font-bold` | Makes text bold |
-| `text-black`, `text-white`, `text-gray-400` | Text color |
-| `text-center` | Centers text horizontally within its own box |
-| `placeholder:text-gray-400` | Special "variant" — only styles the *hint text* inside an input, not what you type |
+| Class     | Simple meaning                  |
+| --------- | ------------------------------- |
+| `p-4`     | Padding on all sides            |
+| `px-8`    | Left and right padding          |
+| `py-8`    | Top and bottom padding          |
+| `pl-4`    | Left padding                    |
+| `pr-4`    | Right padding                   |
+| `mt-5`    | Top margin                      |
+| `mx-auto` | Centers an element horizontally |
+
+---
+
+## Borders and Shape
+
+| Class             | Simple meaning               |
+| ----------------- | ---------------------------- |
+| `border`          | Adds a 1px border            |
+| `border-2`        | Adds a 2px border            |
+| `border-blue-500` | Makes the border blue        |
+| `rounded-lg`      | Slightly rounded corners     |
+| `rounded-3xl`     | Very rounded corners         |
+| `rounded-full`    | Makes a circle or pill shape |
+| `shadow-lg`       | Adds a large shadow          |
+
+---
+
+## Text
+
+| Class                       | Simple meaning                   |
+| --------------------------- | -------------------------------- |
+| `text-sm`                   | Small text                       |
+| `text-lg`                   | Large text                       |
+| `text-3xl`                  | Very large text                  |
+| `font-normal`               | Normal text weight               |
+| `font-semibold`             | Semi-bold text                   |
+| `font-bold`                 | Bold text                        |
+| `text-black`                | Black text                       |
+| `text-white`                | White text                       |
+| `text-center`               | Centers text                     |
+| `leading-tight`             | Reduces space between text lines |
+| `placeholder:text-gray-400` | Changes placeholder color        |
 
 ---
 
 ## Colors
 
-| Class | What it does |
-|---|---|
-| `bg-white`, `bg-black`, `bg-gray-200` | Background color (preset names) |
-| `bg-[#9C2327]` | Custom **hex color** background — square brackets let you use any exact color not in the presets |
-| `text-[#1877F2]` | Same idea, but for text/icon color |
-| `hover:bg-[#B32C31]` | Another variant — only applies when the mouse is hovering over the element |
-| `hover:bg-gray-100` | Subtle hover effect for white/outlined buttons |
-| `accent-black` | Changes the color of native checkboxes/radio buttons when checked |
+| Class               | Simple meaning              |
+| ------------------- | --------------------------- |
+| `bg-white`          | White background            |
+| `bg-black`          | Black background            |
+| `bg-gray-200`       | Gray background             |
+| `bg-[#9C2327]`      | Custom background color     |
+| `text-[#1877F2]`    | Custom text color           |
+| `hover:bg-gray-100` | Background changes on hover |
+| `accent-black`      | Changes checkbox color      |
 
 ---
 
 ## Positioning
 
-| Class | What it does |
-|---|---|
-| `relative` | Marks this element as the **anchor point** for any `absolute` children inside it |
-| `absolute` | Pulls the element out of normal flow, positioning it exactly — measured from the nearest `relative` parent |
-| `top-1/2` | Places the element's top edge at the halfway point of its parent |
-| `-translate-y-1/2` | Shifts the element upward by half of **its own** height — used with `top-1/2` for true centering |
-| `right-3`, `right-5` | Distance from the right edge of the `relative` parent |
+| Class      | Simple meaning                                                 |
+| ---------- | -------------------------------------------------------------- |
+| `relative` | Makes this element an anchor for absolute children             |
+| `absolute` | Positions an element freely inside the nearest relative parent |
+| `top-1/2`  | Moves the top edge to the halfway point                        |
+| `left-1/2` | Moves the left edge to the halfway point                       |
+| `right-5`  | Moves an element 5 spacing units from the right                |
+| `z-10`     | Places an element above lower layers                           |
+
+---
+
+## Moving and Transforming
+
+| Class            | Simple meaning                             |
+| ---------------- | ------------------------------------------ |
+| `translate-x-6`  | Moves right                                |
+| `-translate-x-6` | Moves left                                 |
+| `translate-y-6`  | Moves down                                 |
+| `-translate-y-6` | Moves up                                   |
+| `scale-110`      | Makes an element 10% larger                |
+| `scale-x-[-1]`   | Flips an element horizontally              |
+| `rotate-6`       | Rotates clockwise                          |
+| `-rotate-6`      | Rotates counterclockwise                   |
+| `object-contain` | Keeps the whole image visible              |
+| `shrink-0`       | Prevents a flex item from becoming smaller |
+| `max-w-none`     | Removes the default maximum width          |
 
 ---
 
 ## Interaction
 
-| Class | What it does |
-|---|---|
-| `cursor-pointer` | Forces the hand/pointer cursor on hover (Tailwind removes this by default on buttons) |
+| Class            | Simple meaning                |
+| ---------------- | ----------------------------- |
+| `cursor-pointer` | Shows a hand cursor           |
+| `hover:`         | Applies a style when hovering |
+| `focus:`         | Applies a style when focused  |
 
 ---
 
-## Concepts (not exactly classes, but related)
+## React and Next.js
 
-| Term | What it means |
-|---|---|
-| `className` | React's version of HTML's `class` attribute |
-| `useState` | React tool for storing a value that can change (like show/hide password) |
-| Ternary (`condition ? A : B`) | Shorthand if/else used inside JSX |
-| ` "use client"` | Required at the top of a file when using `useState`/`onClick` in Next.js (marks it as browser-interactive) |
-| `Link` (from `next/link`) | Used instead of `<a>` for links to your own pages (faster, no full reload) |
-| `next/image` (`Image`) | Used instead of `<img>` — automatically optimizes images |
+| Term                | Simple meaning                    |
+| ------------------- | --------------------------------- |
+| `className`         | Adds CSS classes in React         |
+| `useState`          | Stores changing data              |
+| `condition ? A : B` | Short if/else statement           |
+| `"use client"`      | Allows state and click events     |
+| `Link`              | Navigates between pages           |
+| `Image`             | Optimized Next.js image component |

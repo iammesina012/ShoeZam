@@ -1,8 +1,28 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabaseClient";
 import { FaSearch, FaShoppingBag, FaUser } from "react-icons/fa";
 
 export default function Home() {
+  const [products, setProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const { data, error } = await supabase.from("products").select("*").eq("brand", "New Balance");
+
+      if (error) {
+        alert(error.message);
+      } else {
+        setProducts(data);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#F2F2F2]">
       {/* Header */}
@@ -32,6 +52,35 @@ export default function Home() {
             />
             <div className="absolute inset-0 bg-black/40" />
             <h1 className="absolute left-14 bottom-14 text-6xl font-bold text-white">New Balance</h1>
+          </div>
+        </section>
+
+        {/* Search Filters + Sort By + Product Catalog */}
+        <section className="flex p-4 gap-4">
+          <div className="w-56 p-4 rounded-lg shadow-sm bg-white text-black">Search Filters</div>
+
+          <div className="flex-1 flex flex-col gap-4">
+            <div className="flex items-center gap-4 p-4 rounded-lg shadow-sm bg-white text-black">
+              <span>Sort by</span>
+              <select className="border rounded-lg p-2 cursor-pointer">
+                <option value="az">A-Z</option>
+                <option value="za">Z-A</option>
+                <option value="low-high">Price: Low to High</option>
+                <option value="high-low">Price: High to Low</option>
+              </select>
+            </div>
+
+            <div className="grid grid-cols-4 gap-4">
+              {products.map((product) => (
+                <div key={product.id} className="p-8 bg-white rounded-lg text-black shadow-sm cursor-pointer">
+                  <div className="w-full h-50 relative">
+                    <Image src={product.image_url} alt={product.name} fill className="object-contain" />
+                  </div>
+                  <p className="text-sm font-bold text-black mt-2 line-clamp-2">{product.name}</p>
+                  <p className="text-base font-bold text-[#9C2327] mt-1">₱{product.price.toFixed(2)}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
       </main>

@@ -92,7 +92,7 @@ export default function Home() {
               <div className="absolute h-95 w-95 rounded-full bg-[#9C2327]" />
 
               <Image
-                src="/vans-old-skool-lx-cdgb.png"
+                src="/vans-old-skool-lx-comme-des-garcons-black.png"
                 alt="Vans Black and White Sneakers"
                 width={550}
                 height={400}
@@ -202,11 +202,11 @@ export default function Home() {
           </div>
 
           {/* Product Catalog */}
-          <div className="mx-auto mt-8 grid max-w-360 grid-cols-1 gap-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8 cursor-pointer">
+          <div className="mx-auto mt-8 grid max-w-360 grid-cols-1 gap-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
             {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                className="rounded-2xl bg-white p-5 text-black shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className="rounded-2xl bg-white p-5 text-black shadow-sm transition hover:-translate-y-1 hover:shadow-lg cursor-pointer"
               >
                 <div className="relative h-56 w-full">
                   <Image src={product.image_url} alt={product.name} fill className="object-contain" />

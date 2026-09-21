@@ -8,11 +8,11 @@ import { FaSearch, FaShoppingBag, FaUser, FaChevronDown, FaTimes } from "react-i
 
 export default function Home() {
   const brands = [
-    { name: "Adidas", href: "/brands/adidas", logo: "/adidas-logo.png" },
-    { name: "Converse", href: "/brands/converse", logo: "/converse-logo.png" },
-    { name: "New Balance", href: "/brands/new-balance", logo: "/newbalance-logo.png" },
-    { name: "Nike", href: "/brands/nike", logo: "/nike-logo.png" },
-    { name: "Vans", href: "/brands/vans", logo: "/vans-logo.png" },
+    { name: "Adidas", href: "/brands/adidas", logo: "/logos/adidas-logo.png" },
+    { name: "Converse", href: "/brands/converse", logo: "/logos/converse-logo.png" },
+    { name: "New Balance", href: "/brands/new-balance", logo: "/logos/newbalance-logo.png" },
+    { name: "Nike", href: "/brands/nike", logo: "/logos/nike-logo.png" },
+    { name: "Vans", href: "/brands/vans", logo: "/logos/vans-logo.png" },
   ];
 
   const [products, setProducts] = useState<any[]>([]);
@@ -49,12 +49,22 @@ export default function Home() {
     return matchesBrand && matchesPrice;
   });
 
+  const [sortBy, setSortBy] = useState("az");
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortBy === "za") return b.name.localeCompare(a.name);
+    if (sortBy === "low-high") return Number(a.price) - Number(b.price);
+    if (sortBy === "high-low") return Number(b.price) - Number(a.price);
+
+    return a.name.localeCompare(b.name);
+  });
+
   return (
     <div className="min-h-screen bg-[#F2F2F2]">
       {/* Header */}
       <header className="sticky top-0 z-50 flex items-center gap-12 bg-black px-10 py-5">
         <Link href="/">
-          <Image src="/shoezam-logo.png" alt="ShoeZam logo" width={90} height={90} className="cursor-pointer" />
+          <Image src="/logos/shoezam-logo.png" alt="ShoeZam logo" width={90} height={90} className="cursor-pointer" />
         </Link>
         <div className="relative flex-1">
           <input type="text" placeholder="Search your shoes..." className="w-full rounded-lg border p-3" />
@@ -92,7 +102,7 @@ export default function Home() {
               <div className="absolute h-95 w-95 rounded-full bg-[#9C2327]" />
 
               <Image
-                src="/vans-old-skool-lx-comme-des-garcons-black.png"
+                src="/products/vans/vans-old-skool-lx-comme-des-garcons-black.png"
                 alt="Vans Black and White Sneakers"
                 width={550}
                 height={400}
@@ -139,71 +149,92 @@ export default function Home() {
           </div>
 
           {/* White Container */}
-          <div className="mt-4 flex items-center justify-center gap-3">
-            <div className="flex items-center gap-2 rounded-full bg-white p-2 shadow-sm">
-              {/* Brand Dropdown */}
-              <div className="relative">
-                <select
-                  value={selectedBrand}
-                  onChange={(e) => setSelectedBrand(e.target.value)}
-                  className="w-62 appearance-none rounded-full bg-[#9C2327] p-5 pl-8 pr-12 font-semibold text-white cursor-pointer"
-                >
-                  <option value="" disabled hidden>
-                    Brand
-                  </option>
-                  <option value="Adidas">Adidas</option>
-                  <option value="Converse">Converse</option>
-                  <option value="New Balance">New Balance</option>
-                  <option value="Nike">Nike</option>
-                  <option value="Vans">Vans</option>
-                </select>
-                <FaChevronDown className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-white" />
+          <div className="mx-auto mt-8 flex max-w-360 flex-wrap items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <div className="flex flex-wrap items-center justify-center gap-3 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black shadow-sm">
+                <span>Search Filter</span>
+
+                {/* Brand Dropdown */}
+                <div className="relative">
+                  <select
+                    value={selectedBrand}
+                    onChange={(e) => setSelectedBrand(e.target.value)}
+                    className="w-44 appearance-none rounded-lg border border-gray-300 bg-white p-2 pr-9 font-normal text-black cursor-pointer"
+                  >
+                    <option value="" disabled hidden>
+                      Brand
+                    </option>
+                    <option value="Adidas">Adidas</option>
+                    <option value="Converse">Converse</option>
+                    <option value="New Balance">New Balance</option>
+                    <option value="Nike">Nike</option>
+                    <option value="Vans">Vans</option>
+                  </select>
+                  <FaChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-black" />
+                </div>
+
+                {/* Price Range Dropdown */}
+                <div className="relative">
+                  <select
+                    value={selectedPrice}
+                    onChange={(e) => setSelectedPrice(e.target.value)}
+                    className="w-44 appearance-none rounded-lg border border-gray-300 bg-white p-2 pr-9 font-normal text-black cursor-pointer"
+                  >
+                    <option value="" disabled hidden>
+                      Price Range
+                    </option>
+                    <option value="under-2000">Under ₱2,000</option>
+                    <option value="2000-5000">₱2,000 - ₱5,000</option>
+                    <option value="5000-10000">₱5,000 - ₱10,000</option>
+                    <option value="10000-30000">₱10,000 - ₱30,000</option>
+                    <option value="30000-60000">₱30,000 - ₱60,000</option>
+                    <option value="60000-100000">₱60,000 - ₱100,000</option>
+                    <option value="over-100000">Over ₱100,000</option>
+                  </select>
+                  <FaChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-black" />
+                </div>
               </div>
 
-              {/* Price Range Dropdown */}
-              <div className="relative">
-                <select
-                  value={selectedPrice}
-                  onChange={(e) => setSelectedPrice(e.target.value)}
-                  className="w-62 appearance-none rounded-full bg-[#9C2327] p-5 pl-8 pr-12 font-semibold text-white cursor-pointer"
-                >
-                  <option value="" disabled hidden>
-                    Price Range
-                  </option>
-                  <option value="under-2000">Under ₱2,000</option>
-                  <option value="2000-5000">₱2,000 - ₱5,000</option>
-                  <option value="5000-10000">₱5,000 - ₱10,000</option>
-                  <option value="10000-30000">₱10,000 - ₱30,000</option>
-                  <option value="30000-60000">₱30,000 - ₱60,000</option>
-                  <option value="60000-100000">₱60,000 - ₱100,000</option>
-                  <option value="over-100000">Over ₱100,000</option>
-                </select>
-                <FaChevronDown className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-white" />
-              </div>
+              {/* Clear Filter button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedBrand("");
+                  setSelectedPrice("");
+                }}
+                disabled={!selectedBrand && !selectedPrice}
+                className={`flex items-center gap-2 rounded-full border-2 px-5 py-3 font-bold transition ${
+                  selectedBrand || selectedPrice
+                    ? "border-[#9C2327] text-[#9C2327] hover:bg-[#9C2327] hover:text-white cursor-pointer"
+                    : "border-[#D6D6D6] text-[#9A9A9A] cursor-not-allowed"
+                }`}
+              >
+                <FaTimes className="text-sm" />
+                Clear Filters
+              </button>
             </div>
 
-            {/* Clear Filter button */}
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedBrand("");
-                setSelectedPrice("");
-              }}
-              disabled={!selectedBrand && !selectedPrice}
-              className={`flex items-center gap-2 rounded-full border-2 px-5 py-3 font-bold transition ${
-                selectedBrand || selectedPrice
-                  ? "border-[#9C2327] text-[#9C2327] hover:bg-[#9C2327] hover:text-white cursor-pointer"
-                  : "border-[#D6D6D6] text-[#9A9A9A] cursor-not-allowed"
-              }`}
-            >
-              <FaTimes className="text-sm" />
-              Clear Filters
-            </button>
+            <label className="flex items-center gap-3 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black shadow-sm">
+              Sort by
+              <div className="relative">
+                <select
+                  value={sortBy}
+                  onChange={(event) => setSortBy(event.target.value)}
+                  className="w-44 appearance-none rounded-lg border border-gray-300 bg-white p-2 pr-9 font-normal cursor-pointer"
+                >
+                  <option value="az">A-Z</option>
+                  <option value="za">Z-A</option>
+                  <option value="low-high">Price: Low to High</option>
+                  <option value="high-low">Price: High to Low</option>
+                </select>
+                <FaChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-black" />
+              </div>
+            </label>
           </div>
 
           {/* Product Catalog */}
           <div className="mx-auto mt-8 grid max-w-360 grid-cols-1 gap-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
-            {filteredProducts.map((product) => (
+            {sortedProducts.map((product) => (
               <div
                 key={product.id}
                 className="rounded-2xl bg-white p-5 text-black shadow-sm transition hover:-translate-y-1 hover:shadow-lg cursor-pointer"

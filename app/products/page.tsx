@@ -1,0 +1,24 @@
+import Image from "next/image";
+import Link from "next/link";
+import { FaSearch, FaShoppingBag, FaUser } from "react-icons/fa";
+
+export default function ProductsPage() {
+  return (
+    <div className="min-h-screen bg-[#F2F2F2]">
+      {/* Header */}
+      <header className="sticky top-0 z-50 flex items-center gap-12 bg-black px-10 py-5">
+        <Link href="/">
+          <Image src="/logos/shoezam-logo.png" alt="ShoeZam logo" width={90} height={90} className="cursor-pointer" />
+        </Link>
+        <div className="relative flex-1">
+          <input type="text" placeholder="Search your shoes..." className="w-full rounded-lg border p-3" />
+          <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2" />
+        </div>
+        <div className="flex items-center gap-8 text-2xl text-white">
+          <FaShoppingBag className="cursor-pointer" />
+          <FaUser className="cursor-pointer" />
+        </div>
+      </header>
+    </div>
+  );
+}

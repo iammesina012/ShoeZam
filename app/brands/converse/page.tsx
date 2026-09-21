@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { FaSearch, FaShoppingBag, FaUser, FaChevronDown } from "react-icons/fa";
 
-export default function Home() {
+export default function Converse() {
   const [products, setProducts] = useState<any[]>([]);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function Home() {
       {/* Header */}
       <header className="sticky top-0 z-50 flex items-center gap-12 bg-black px-10 py-5">
         <Link href="/">
-          <Image src="/shoezam-logo.png" alt="ShoeZam logo" width={90} height={90} className="cursor-pointer" />
+          <Image src="/logos/shoezam-logo.png" alt="ShoeZam logo" width={90} height={90} className="cursor-pointer" />
         </Link>
         <div className="relative flex-1">
           <input type="text" placeholder="Search your shoes..." className="w-full rounded-lg border p-3" />
@@ -70,7 +70,7 @@ export default function Home() {
         <section>
           <div className="relative w-full h-80">
             <Image
-              src="/converse-hero4.jpg"
+              src="/heroes/converse-hero4.jpg"
               alt="A blue shoe with white lace against a red background."
               fill
               className="object-cover object-[center_50%]"
@@ -89,7 +89,10 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => setSelectedPrice("")}
-                className="text-sm font-semibold text-[#9C2327] hover:underline cursor-pointer"
+                disabled={!selectedPrice}
+                className={`text-sm font-semibold ${
+                  selectedPrice ? "text-[#9C2327] hover:underline cursor-pointer" : "text-[#9A9A9A] cursor-not-allowed"
+                }`}
               >
                 Clear
               </button>

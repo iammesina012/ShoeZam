@@ -51,7 +51,13 @@ export default async function ProductsPage({ params }: ProductPageProps) {
             </span>
 
             <h1 className="mt-4 max-w-2xl font-bold text-black text-4xl">{data?.name}</h1>
-            <h2 className="mt-4 font-semibold text-[#9C2327] text-3xl">₱{data?.price}</h2>
+            <h2 className="mt-4 font-semibold text-[#9C2327] text-3xl">
+              ₱
+              {data?.price?.toLocaleString("en-PH", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </h2>
             <p className="mt-4 max-w-2xl border-b border-gray-300 pb-6 text-sm text-[#858585]">{data?.description}</p>
 
             <div>

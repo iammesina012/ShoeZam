@@ -151,8 +151,9 @@ export default function Adidas() {
             {/* Product Catalog */}
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {sortedProducts.map((product) => (
-                <div
+                <Link
                   key={product.id}
+                  href={`/products/${product.id}`}
                   className="rounded-2xl bg-white p-5 text-black shadow-sm transition hover:-translate-y-1 hover:shadow-lg cursor-pointer"
                 >
                   <div className="relative h-56 w-full overflow-hidden">
@@ -167,7 +168,7 @@ export default function Adidas() {
                       minimumFractionDigits: 2,
                     })}
                   </p>
-                </div>
+                </Link>
               ))}
             </div>
           </div>

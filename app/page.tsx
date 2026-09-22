@@ -234,8 +234,9 @@ export default function Home() {
           {/* Product Catalog */}
           <div className="mx-auto mt-8 grid max-w-360 grid-cols-1 gap-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
             {sortedProducts.map((product) => (
-              <div
+              <Link
                 key={product.id}
+                href={`/products/${product.id}`}
                 className="rounded-2xl bg-white p-5 text-black shadow-sm transition hover:-translate-y-1 hover:shadow-lg cursor-pointer"
               >
                 <div className="relative h-56 w-full">
@@ -248,9 +249,10 @@ export default function Home() {
                   ₱
                   {Number(product.price).toLocaleString("en-PH", {
                     minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
                   })}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
         </section>

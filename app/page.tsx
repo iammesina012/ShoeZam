@@ -80,7 +80,6 @@ export default function Home() {
         {/* Hero Banner */}
         <section className="px-4 py-8 sm:px-6 lg:px-8">
           <div className="mx-auto flex max-w-360 items-center justify-between rounded-3xl bg-white px-8 py-12 shadow-sm lg:px-16 lg:py-20">
-            {/* existing hero content */}
             {/* Text */}
             <div className="max-w-xl">
               <p className="text-3xl font-bold text-[#9C2327]">NEW ARRIVAL!</p>
@@ -99,7 +98,7 @@ export default function Home() {
 
             {/* Red circle + Shoe image */}
             <div className="relative flex items-center justify-center">
-              <div className="absolute h-95 w-95 rounded-full bg-[#9C2327]" />
+              <div className="absolute h-96 w-96 rounded-full bg-[#9C2327]" />
 
               <Image
                 src="/products/vans/vans-old-skool-lx-comme-des-garcons-black.png"

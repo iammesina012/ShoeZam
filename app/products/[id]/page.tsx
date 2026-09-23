@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Link from "next/link";
 import { supabase } from "@/lib/supabaseClient";
-import { FaSearch, FaShoppingBag, FaUser } from "react-icons/fa";
+import { FaShoppingBag } from "react-icons/fa";
+import AddToBagButton from "@/components/add-to-bag-button";
 
 // this page will receive params — container that has the id
 type ProductPageProps = {
@@ -9,28 +9,13 @@ type ProductPageProps = {
 };
 
 // give params that next.js sends to this page
-export default async function ProductsPage({ params }: ProductPageProps) {
+export default async function Products({ params }: ProductPageProps) {
   const { id } = await params;
 
   const { data, error } = await supabase.from("products").select("*").eq("id", id).single();
 
   return (
     <div className="min-h-screen overflow-hidden bg-[#F2F2F2]">
-      {/* Header */}
-      <header className="sticky top-0 z-50 flex items-center gap-12 bg-black px-10 py-5">
-        <Link href="/">
-          <Image src="/logos/shoezam-logo.png" alt="ShoeZam logo" width={90} height={90} className="cursor-pointer" />
-        </Link>
-        <div className="relative flex-1">
-          <input type="text" placeholder="Search your shoes..." className="w-full rounded-lg border p-3" />
-          <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2" />
-        </div>
-        <div className="flex items-center gap-8 text-2xl text-white">
-          <FaShoppingBag className="cursor-pointer" />
-          <FaUser className="cursor-pointer" />
-        </div>
-      </header>
-
       <main>
         <div className="flex min-h-[calc(100vh-114px)] items-center justify-between">
           {/* Shoe image + Red circle */}
@@ -82,13 +67,7 @@ export default async function ProductsPage({ params }: ProductPageProps) {
               </div>
             </div>
 
-            <button
-              type="button"
-              className="mt-6 flex max-w-sm items-center justify-center gap-3 rounded-xl bg-[#B5121B] px-6 py-5 text-lg font-bold cursor-pointer"
-            >
-              <FaShoppingBag className="text-xl" />
-              Add to Bag
-            </button>
+            <AddToBagButton product={data} />
           </section>
         </div>
       </main>

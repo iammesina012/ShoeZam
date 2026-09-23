@@ -73,7 +73,7 @@ export default function Register() {
   };
   return (
     <div className="bg-white min-h-screen flex flex-col">
-      <header className="flex items-center gap-5 p-4 pl-15 bg-white">
+      <header className="flex items-center gap-5 p-4 px-56 bg-white">
         {/* Header */}
 
         <div className="flex items-center gap-5">
@@ -185,7 +185,7 @@ export default function Register() {
               {/* Sign up */}
               <div className="flex items-center justify-center mt-8 gap-1">
                 <p className="text-xs text-black">Already have an account?</p>
-                <Link href="/login" className="text-xs font-bold text-[#9C2327]">
+                <Link href="/login" className="text-xs font-bold text-[#9C2327] hover:underline">
                   Log In
                 </Link>
               </div>

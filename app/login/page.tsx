@@ -51,7 +51,7 @@ export default function Login() {
   };
   return (
     <div className="bg-white min-h-screen flex flex-col">
-      <header className="flex items-center gap-5 p-4 pl-15 bg-white">
+      <header className="flex items-center gap-5 p-4 px-56 bg-white">
         {/* Header */}
 
         <div className="flex items-center gap-5">
@@ -122,7 +122,7 @@ export default function Login() {
                 </div>
                 <a
                   href="https://shopee.ph/buyer/reset?scenario=7"
-                  className="flex items-center mt-5 text-sm text-[#9C2327]"
+                  className="flex items-center mt-5 text-sm text-[#9C2327] hover:underline"
                 >
                   Forgot Password?
                 </a>
@@ -158,7 +158,7 @@ export default function Login() {
 
               <div className="flex items-center justify-center mt-8 gap-1">
                 <p className="text-xs text-black">Don&apos;t have an account?</p>
-                <Link href="/register" className="text-xs font-bold text-[#9C2327]">
+                <Link href="/register" className="text-xs font-bold text-[#9C2327] hover:underline">
                   Sign Up
                 </Link>
               </div>

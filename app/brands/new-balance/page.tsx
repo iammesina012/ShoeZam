@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { FaSearch, FaShoppingBag, FaUser, FaChevronDown } from "react-icons/fa";
+import { FaChevronDown } from "react-icons/fa";
 
 export default function NewBalance() {
   const [products, setProducts] = useState<any[]>([]);
@@ -50,21 +50,6 @@ export default function NewBalance() {
 
   return (
     <div className="min-h-screen bg-[#F2F2F2]">
-      {/* Header */}
-      <header className="sticky top-0 z-50 flex items-center gap-12 bg-black px-10 py-5">
-        <Link href="/">
-          <Image src="/logos/shoezam-logo.png" alt="ShoeZam logo" width={90} height={90} className="cursor-pointer" />
-        </Link>
-        <div className="relative flex-1">
-          <input type="text" placeholder="Search your shoes..." className="w-full rounded-lg border p-3" />
-          <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2" />
-        </div>
-        <div className="flex items-center gap-8 text-2xl text-white">
-          <FaShoppingBag className="cursor-pointer" />
-          <FaUser className="cursor-pointer" />
-        </div>
-      </header>
-
       <main>
         {/* Hero Banner */}
         <section>
@@ -81,7 +66,7 @@ export default function NewBalance() {
         </section>
 
         {/* Search Filters */}
-        <section className="mx-auto grid max-w-360 gap-6 px-4 py-8 sm:px-6 lg:grid-cols-[240px_1fr] lg:px-8">
+        <section className="mx-auto grid max-w-360 gap-6 py-6 lg:grid-cols-[240px_1fr]">
           <aside className="h-fit rounded-2xl bg-white p-6 text-black shadow-sm">
             <div className="mb-6 flex items-center justify-between">
               <h2 className="text-lg font-bold">Search Filters</h2>

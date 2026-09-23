@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
-import { FaSearch, FaShoppingBag, FaUser, FaChevronDown, FaTimes } from "react-icons/fa";
+import { FaChevronDown, FaTimes } from "react-icons/fa";
 
 export default function Home() {
   const brands = [
@@ -61,25 +61,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F2F2F2]">
-      {/* Header */}
-      <header className="sticky top-0 z-50 flex items-center gap-12 bg-black px-10 py-5">
-        <Link href="/">
-          <Image src="/logos/shoezam-logo.png" alt="ShoeZam logo" width={90} height={90} className="cursor-pointer" />
-        </Link>
-        <div className="relative flex-1">
-          <input type="text" placeholder="Search your shoes..." className="w-full rounded-lg border p-3" />
-          <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2" />
-        </div>
-        <div className="flex items-center gap-8 text-2xl text-white">
-          <FaShoppingBag className="cursor-pointer" />
-          <FaUser className="cursor-pointer" />
-        </div>
-      </header>
-
       <main>
         {/* Hero Banner */}
-        <section className="px-4 py-8 sm:px-6 lg:px-8">
-          <div className="mx-auto flex max-w-360 items-center justify-between rounded-3xl bg-white px-8 py-12 shadow-sm lg:px-16 lg:py-20">
+        <section className="py-8">
+          <div className="mx-auto flex max-w-360 items-center justify-between rounded-3xl bg-white px-12 py-12 shadow-sm">
             {/* Text */}
             <div className="max-w-xl">
               <p className="text-3xl font-bold text-[#9C2327]">NEW ARRIVAL!</p>
@@ -98,14 +83,14 @@ export default function Home() {
 
             {/* Red circle + Shoe image */}
             <div className="relative flex items-center justify-center">
-              <div className="absolute h-96 w-96 rounded-full bg-[#9C2327]" />
+              <div className="absolute h-72 w-72 rounded-full bg-[#9C2327]" />
 
               <Image
                 src="/products/vans/vans-old-skool-lx-comme-des-garcons-black.png"
                 alt="Vans Black and White Sneakers"
-                width={550}
-                height={400}
-                className="-translate-x-8 -translate-y-16 scale-x-[-1] -rotate-28 object-contain"
+                width={360}
+                height={360}
+                className="-translate-x-8 -translate-y-12 scale-x-[-1] -rotate-28 object-contain"
               />
             </div>
           </div>
@@ -119,7 +104,7 @@ export default function Home() {
           </div>
 
           {/* Brand Cards */}
-          <div className="mx-auto mt-8 grid max-w-360 grid-cols-2 gap-4 px-4 sm:grid-cols-3 sm:px-6 lg:grid-cols-5 lg:px-8">
+          <div className="mx-auto mt-8 grid max-w-360 grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
             {brands.map((brand) => (
               <Link
                 key={brand.name}
@@ -148,7 +133,7 @@ export default function Home() {
           </div>
 
           {/* White Container */}
-          <div className="mx-auto mt-8 flex max-w-360 flex-wrap items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto mt-8 flex max-w-360 flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center justify-center gap-3">
               <div className="flex flex-wrap items-center justify-center gap-3 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black shadow-sm">
                 <span>Search Filter</span>
@@ -232,7 +217,7 @@ export default function Home() {
           </div>
 
           {/* Product Catalog */}
-          <div className="mx-auto mt-8 grid max-w-360 grid-cols-1 gap-6 px-4 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+          <div className="mx-auto mt-8 grid max-w-360 grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {sortedProducts.map((product) => (
               <Link
                 key={product.id}

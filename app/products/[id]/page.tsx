@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { supabase } from "@/lib/supabaseClient";
-import { FaShoppingBag } from "react-icons/fa";
 import AddToBagButton from "@/components/add-to-bag-button";
 
 // this page will receive params — container that has the id
@@ -43,7 +42,9 @@ export default async function Products({ params }: ProductPageProps) {
                 maximumFractionDigits: 2,
               })}
             </h2>
-            <p className="mt-4 max-w-2xl border-b border-gray-300 pb-6 text-sm text-[#858585]">{data?.description}</p>
+            <p className="mt-4 max-w-2xl border-b border-gray-300 pb-6 text-sm text-[#858585]">
+              {data?.description}
+            </p>
 
             <div>
               <h3 className="mt-4 font-semibold text-black text-xl">Color</h3>
@@ -62,8 +63,12 @@ export default async function Products({ params }: ProductPageProps) {
                 <button className="rounded-md border px-5 py-3 text-black cursor-pointer">7</button>
                 <button className="rounded-md border px-5 py-3 text-black cursor-pointer">8</button>
                 <button className="rounded-md border px-5 py-3 text-black cursor-pointer">9</button>
-                <button className="rounded-md border px-5 py-3 text-black cursor-pointer">10</button>
-                <button className="rounded-md border px-5 py-3 text-black cursor-pointer">11</button>
+                <button className="rounded-md border px-5 py-3 text-black cursor-pointer">
+                  10
+                </button>
+                <button className="rounded-md border px-5 py-3 text-black cursor-pointer">
+                  11
+                </button>
               </div>
             </div>
 

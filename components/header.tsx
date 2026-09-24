@@ -16,7 +16,13 @@ export default function Header() {
     <header className="sticky top-0 z-50 bg-black">
       <div className="flex items-center gap-4 p-4 sm:gap-8 sm:py-4 lg:px-56">
         <Link href="/" className="shrink-0">
-          <Image src="/logos/shoezam-logo.png" alt="ShoeZam logo" width={90} height={90} className="cursor-pointer" />
+          <Image
+            src="/logos/shoezam-logo.png"
+            alt="ShoeZam logo"
+            width={90}
+            height={90}
+            className="cursor-pointer"
+          />
         </Link>
 
         <div className="relative min-w-0 flex-1">
@@ -29,7 +35,9 @@ export default function Header() {
         </div>
 
         <div className="hidden shrink-0 items-center gap-8 text-2xl text-white sm:flex">
-          <FaShoppingBag className="cursor-pointer" />
+          <Link href="/cart">
+            <FaShoppingBag className="cursor-pointer" />
+          </Link>
           <FaUser className="cursor-pointer" />
         </div>
       </div>

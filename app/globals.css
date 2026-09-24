@@ -31,6 +31,6 @@ main {
 
 @media (min-width: 1024px) {
   main {
-    padding-inline: 14rem;
+    padding-inline: 10rem;
   }
 }

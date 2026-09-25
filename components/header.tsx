@@ -8,7 +8,12 @@ import { FaSearch, FaShoppingBag, FaUser } from "react-icons/fa";
 export default function Header() {
   const pathname = usePathname();
 
-  if (pathname === "/login" || pathname === "/register" || pathname === "/cart") {
+  if (
+    pathname === "/login" ||
+    pathname === "/register" ||
+    pathname === "/cart" ||
+    pathname === "/checkout"
+  ) {
     return null;
   }
 

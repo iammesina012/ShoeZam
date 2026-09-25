@@ -39,11 +39,16 @@ export default function Home() {
 
     let matchesPrice = true;
     if (selectedPrice === "under-2000") matchesPrice = product.price < 2000;
-    if (selectedPrice === "2000-5000") matchesPrice = product.price >= 2000 && product.price <= 5000;
-    if (selectedPrice === "5000-10000") matchesPrice = product.price >= 5000 && product.price <= 10000;
-    if (selectedPrice === "10000-30000") matchesPrice = product.price >= 10000 && product.price <= 30000;
-    if (selectedPrice === "30000-60000") matchesPrice = product.price >= 30000 && product.price <= 60000;
-    if (selectedPrice === "60000-100000") matchesPrice = product.price >= 60000 && product.price <= 100000;
+    if (selectedPrice === "2000-5000")
+      matchesPrice = product.price >= 2000 && product.price <= 5000;
+    if (selectedPrice === "5000-10000")
+      matchesPrice = product.price >= 5000 && product.price <= 10000;
+    if (selectedPrice === "10000-30000")
+      matchesPrice = product.price >= 10000 && product.price <= 30000;
+    if (selectedPrice === "30000-60000")
+      matchesPrice = product.price >= 30000 && product.price <= 60000;
+    if (selectedPrice === "60000-100000")
+      matchesPrice = product.price >= 60000 && product.price <= 100000;
     if (selectedPrice === "over-100000") matchesPrice = product.price > 100000;
 
     return matchesBrand && matchesPrice;
@@ -69,14 +74,19 @@ export default function Home() {
             <div className="max-w-xl">
               <p className="text-3xl font-bold text-[#9C2327]">NEW ARRIVAL!</p>
 
-              <h1 className="mt-4 text-5xl font-bold text-black">Vans Old Skool LX Comme Des Garcons</h1>
+              <h1 className="mt-4 text-5xl font-bold text-black">
+                Vans Old Skool LX Comme Des Garcons
+              </h1>
 
               <p className="mt-8 text-lg text-[#858585]">
-                Features a predominantly black upper made of canvas with suede detailing on the toebox, eyestays, and
-                heel.
+                Features a predominantly black upper made of canvas with suede detailing on the
+                toebox, eyestays, and heel.
               </p>
 
-              <button type="button" className="mt-8 rounded-full bg-black px-10 py-4 text-lg text-white cursor-pointer">
+              <button
+                type="button"
+                className="mt-8 rounded-full bg-black px-10 py-4 text-lg text-white cursor-pointer"
+              >
                 View product
               </button>
             </div>
@@ -100,7 +110,9 @@ export default function Home() {
           {/* Title + Subtitle */}
           <div className="flex flex-col items-center">
             <h2 className="font-bold text-5xl text-black">Shop by Brand</h2>
-            <p className="mt-4 text-xl text-[#858585]">Explore your favorite footwear brands, all in one place.</p>
+            <p className="mt-4 text-xl text-[#858585]">
+              Explore your favorite footwear brands, all in one place.
+            </p>
           </div>
 
           {/* Brand Cards */}
@@ -225,7 +237,12 @@ export default function Home() {
                 className="rounded-2xl bg-white p-5 text-black shadow-sm transition hover:-translate-y-1 hover:shadow-lg cursor-pointer"
               >
                 <div className="relative h-56 w-full">
-                  <Image src={product.image_url} alt={product.name} fill className="object-contain" />
+                  <Image
+                    src={product.image_url}
+                    alt={product.name}
+                    fill
+                    className="object-contain"
+                  />
                 </div>
 
                 <p className="mt-4 min-h-12 line-clamp-2 text-sm font-bold">{product.name}</p>

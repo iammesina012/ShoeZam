@@ -47,7 +47,7 @@ export default function ShoppingBag() {
   return (
     <div className="min-h-screen bg-[#F2F2F2]">
       {/* Header */}
-      <header className="sticky top-0 z-50 flex items-center justify-between gap-12 bg-black p-4 sm:gap-8 sm:py-4 lg:px-42">
+      <header className="flex items-center justify-between bg-black px-42 py-4">
         <div className="flex items-center gap-4 ">
           <Link href="/">
             <Image
@@ -136,7 +136,7 @@ export default function ShoppingBag() {
                         }}
                       />
 
-                      <label className="text-sm text-black">{brand}</label>
+                      <label className="text-sm text-black font-bold">{brand}</label>
                     </div>
                   </div>
 

@@ -3,11 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
 
 export default function ShoppingBag() {
   const [products, setProducts] = useState<any[] | null>(null);
   const [selectedProducts, setSelectedProducts] = useState<any[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const savedBag = localStorage.getItem("shoppingBag");
@@ -288,6 +290,29 @@ export default function ShoppingBag() {
                   type="button"
                   disabled={selectedProducts.length === 0}
                   className="rounded-lg bg-[#9C2327] px-6 py-3 text-white cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+                  onClick={() => {
+                    const checkoutProducts = (products ?? [])
+                      .filter((product) => selectedProducts.includes(product.id))
+                      .map((product) => ({
+                        ...product,
+                        subtotal: product.price * product.quantity,
+                      }));
+
+                    const checkoutTotal = checkoutProducts.reduce(
+                      (sum, product) => sum + product.subtotal,
+                      0,
+                    );
+
+                    localStorage.setItem(
+                      "checkoutData",
+                      JSON.stringify({
+                        products: checkoutProducts,
+                        total: checkoutTotal,
+                      }),
+                    );
+
+                    router.push("/checkout");
+                  }}
                 >
                   Check out
                 </button>

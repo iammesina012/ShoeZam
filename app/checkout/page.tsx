@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import AddressModal from "../../components/address-modal";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
 export default function Checkout() {
@@ -13,6 +14,8 @@ export default function Checkout() {
   const [total, setTotal] = useState(0);
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState<any>(null);
+  const [orderPlaced, setOrderPlaced] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const savedData = localStorage.getItem("checkoutData");
@@ -66,11 +69,19 @@ export default function Checkout() {
           onSubmit={(e) => {
             e.preventDefault();
 
-            console.log("Payment Method:", paymentMethod);
-            console.log("E-Wallet:", ewallet);
-            console.log("Address:", selectedAddress);
-            console.log("Products:", products);
-            console.log("Total:", total);
+            const order = {
+              address: selectedAddress,
+              products: products,
+              paymentMethod: paymentMethod,
+              ewallet: ewallet,
+              total: total,
+            };
+
+            console.log(order);
+
+            setOrderPlaced(true);
+
+            router.push("/order-success");
           }}
         >
           <section className="w-full mt-4 p-8 bg-white">

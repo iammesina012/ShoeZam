@@ -12,7 +12,9 @@ export default function Header() {
     pathname === "/login" ||
     pathname === "/register" ||
     pathname === "/cart" ||
-    pathname === "/checkout"
+    pathname === "/checkout" ||
+    pathname === "/order-confirmation" ||
+    pathname === "/orders"
   ) {
     return null;
   }

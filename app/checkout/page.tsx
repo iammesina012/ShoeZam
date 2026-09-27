@@ -5,6 +5,7 @@ import Link from "next/link";
 import AddressModal from "../../components/address-modal";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabaseClient";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
 export default function Checkout() {
@@ -66,22 +67,57 @@ export default function Checkout() {
 
       <main>
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
 
-            const order = {
-              address: selectedAddress,
-              products: products,
-              paymentMethod: paymentMethod,
-              ewallet: ewallet,
-              total: total,
-            };
+            const finalPaymentMethod = paymentMethod === "ewallet" ? ewallet : paymentMethod;
 
-            console.log(order);
+            const { data, error } = await supabase
+              .from("orders")
+              .insert({
+                payment_method: finalPaymentMethod,
+                total: total,
+              })
+              .select()
+              .single();
+
+            if (error) {
+              console.log("Order insert error:", JSON.stringify(error, null, 2));
+              return;
+            }
+
+            const orderItems = products.map((product) => ({
+              order_id: data.id,
+              product_id: product.id,
+              product_name: product.name,
+              brand: product.brand,
+              variation: `${product.color}, ${product.size}`,
+              quantity: product.quantity,
+              price: product.price,
+              subtotal: product.subtotal,
+            }));
+
+            const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
+
+            if (itemsError) {
+              console.error("Order items insert error:", itemsError);
+              return;
+            }
+
+            const savedBag = localStorage.getItem("shoppingBag");
+
+            if (savedBag) {
+              const bag = JSON.parse(savedBag);
+
+              const updatedBag = bag.filter(
+                (item: any) => !products.some((product) => product.id === item.id),
+              );
+
+              localStorage.setItem("shoppingBag", JSON.stringify(updatedBag));
+            }
 
             setOrderPlaced(true);
-
-            router.push("/order-success");
+            router.push("/order-confirmation");
           }}
         >
           <section className="w-full mt-4 p-8 bg-white">

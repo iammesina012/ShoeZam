@@ -82,7 +82,6 @@ export default function Checkout() {
               .single();
 
             if (error) {
-              console.log("Order insert error:", JSON.stringify(error, null, 2));
               return;
             }
 

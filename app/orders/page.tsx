@@ -8,17 +8,11 @@ export default async function Orders() {
     .select("*")
     .order("created_at", { ascending: false });
 
-  console.log("Orders:", orders);
-
   const { data: orderItems, error: itemsError } = await supabase.from("order_items").select("*");
-
-  console.log("Order items:", orderItems);
 
   const { data: products, error: productsError } = await supabase
     .from("products")
     .select("id, image_url");
-
-  console.log("Products:", products);
 
   const ordersWithItems = orders?.map((order) => ({
     ...order,
@@ -29,8 +23,6 @@ export default async function Orders() {
         image_url: products?.find((product) => product.id === item.product_id)?.image_url,
       })),
   }));
-
-  console.log("Orders with items:", ordersWithItems);
 
   return (
     <div className="min-h-screen bg-[#F2F2F2]">

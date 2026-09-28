@@ -50,13 +50,12 @@ export default function Login() {
     }
   };
   return (
-    <div className="bg-white min-h-screen flex flex-col">
-      <header className="flex items-center gap-5 p-4 px-56 bg-white">
-        {/* Header */}
-
-        <div className="flex items-center gap-5">
+    <div className="min-h-screen bg-white flex flex-col">
+      <header className="header flex items-center gap-4 p-4 bg-white">
+        <div className="flex items-center gap-4">
           <Image src="/shoezam-logo-black.png" alt="ShoeZam logo" width={90} height={90} />
-          <span className="text-2xl font-bold text-black">Log In</span>
+          <span className="text-3xl text-black">|</span>
+          <span className="text-lg font-bold text-black">Log In</span>
         </div>
       </header>
 
@@ -69,7 +68,7 @@ export default function Login() {
             </p>
           </div>
 
-          {/* Username & Password */}
+          {/* Email & Password */}
 
           <div className="w-1/2 flex items-center justify-center">
             <div className="bg-white p-8 rounded-3xl w-full max-w-sm">
@@ -79,7 +78,7 @@ export default function Login() {
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full mt-5 border border-gray-400 p-3 rounded-lg text-black placeholder:text-gray-400"
+                className="w-full mt-5 border border-[#858585] p-3 rounded-lg placeholder:text-sm text-black placeholder:text-[#858585]"
               />
               <div className="relative mt-5">
                 <input
@@ -87,17 +86,17 @@ export default function Login() {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full border border-gray-400 rounded-lg p-3 text-black placeholder:text-gray-400"
+                  className="w-full border border-[#858585] rounded-lg p-3 placeholder:text-sm text-black placeholder:text-[#858585]"
                 />
                 {showPassword ? (
                   <FaEyeSlash
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-[#858585] cursor-pointer"
                   />
                 ) : (
                   <FaEye
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer"
+                    className="absolute right-5 top-1/2 -translate-y-1/2 text-[#858585] cursor-pointer"
                   />
                 )}
               </div>
@@ -107,7 +106,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={handleLogin}
-                  className="border border-gray-400 rounded-lg p-3 w-full flex items-center justify-center gap-2 text-sm bg-[#9C2327] font-bold text-white hover:bg-[#B32C31] cursor-pointer"
+                  className="rounded-lg p-3 w-full flex items-center justify-center gap-2 text-sm bg-[#9C2327] font-bold text-white hover:bg-[#B32C31] cursor-pointer"
                 >
                   LOG IN
                 </button>
@@ -131,9 +130,9 @@ export default function Login() {
               {/* Divider with "OR" */}
 
               <div className="flex items-center mt-4 gap-3">
-                <div className="flex-1 border-t border-gray-400"></div>
-                <span className="text-xs text-gray-400">OR</span>
-                <div className="flex-1 border-t border-gray-400"></div>
+                <div className="flex-1 border-t border-[#858585]"></div>
+                <span className="text-xs text-[#858585]">OR</span>
+                <div className="flex-1 border-t border-[#858585]"></div>
               </div>
 
               {/* Third-party accounts button */}
@@ -141,13 +140,13 @@ export default function Login() {
               <div className="flex items-center mt-4 gap-3">
                 <button
                   type="button"
-                  className="border border-gray-400 rounded-lg p-3 w-full flex items-center justify-center gap-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                  className="border border-[#858585] rounded-lg p-3 w-full flex items-center justify-center gap-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
                 >
                   <FcGoogle className="text-xl" /> Google
                 </button>
                 <button
                   type="button"
-                  className="border border-gray-400 rounded-lg p-3 w-full flex items-center justify-center gap-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
+                  className="border border-[#858585] rounded-lg p-3 w-full flex items-center justify-center gap-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
                 >
                   <FaFacebook className="text-xl text-[#1877F2]" />
                   Facebook

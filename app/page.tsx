@@ -68,9 +68,9 @@ export default function Home() {
     <div className="min-h-screen bg-[#F2F2F2]">
       <main>
         {/* Hero Banner */}
-        <section className="py-8">
-          <div className="mx-auto flex max-w-360 items-center justify-between rounded-3xl bg-white px-12 py-12 shadow-sm">
-            {/* Text */}
+
+        <section className="mt-8">
+          <div className="flex items-center justify-between rounded-3xl bg-white px-12 py-12 shadow-sm">
             <div className="max-w-xl">
               <p className="text-3xl font-bold text-[#9C2327]">NEW ARRIVAL!</p>
 
@@ -92,6 +92,7 @@ export default function Home() {
             </div>
 
             {/* Red circle + Shoe image */}
+
             <div className="relative flex items-center justify-center">
               <div className="absolute h-72 w-72 rounded-full bg-[#9C2327]" />
 
@@ -106,8 +107,9 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mt-4">
-          {/* Title + Subtitle */}
+        {/* Shop by Brand */}
+
+        <section className="mt-12">
           <div className="flex flex-col items-center">
             <h2 className="font-bold text-5xl text-black">Shop by Brand</h2>
             <p className="mt-4 text-xl text-[#858585]">
@@ -116,7 +118,8 @@ export default function Home() {
           </div>
 
           {/* Brand Cards */}
-          <div className="mx-auto mt-8 grid max-w-360 grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+
+          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
             {brands.map((brand) => (
               <Link
                 key={brand.name}
@@ -135,8 +138,9 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Title + Subtitle */}
-        <section className="min-h-screen mt-12">
+        {/* Step Into Something New */}
+
+        <section className="mt-12">
           <div className="flex flex-col items-center">
             <h1 className="text-5xl font-bold text-black">Step Into Something New</h1>
             <p className="mt-4 text-xl text-[#858585]">
@@ -144,18 +148,20 @@ export default function Home() {
             </p>
           </div>
 
-          {/* White Container */}
-          <div className="mx-auto mt-8 flex max-w-360 flex-wrap items-center justify-between gap-3">
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <div className="flex flex-wrap items-center justify-center gap-3 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black shadow-sm">
+          <div className="mt-8 flex justify-between">
+            <div className="flex items-center gap-4">
+              {/* Search Filter */}
+
+              <div className="flex items-center rounded-full shadow-sm p-4 gap-4 bg-white text-sm font-semibold text-black">
                 <span>Search Filter</span>
 
                 {/* Brand Dropdown */}
+
                 <div className="relative">
                   <select
                     value={selectedBrand}
                     onChange={(e) => setSelectedBrand(e.target.value)}
-                    className="w-44 appearance-none rounded-lg border border-gray-300 bg-white p-2 pr-9 font-normal text-black cursor-pointer"
+                    className="w-46 appearance-none rounded-lg border border-gray-300 bg-white p-2 pr-9 font-normal text-black cursor-pointer"
                   >
                     <option value="" disabled hidden>
                       Brand
@@ -170,11 +176,12 @@ export default function Home() {
                 </div>
 
                 {/* Price Range Dropdown */}
+
                 <div className="relative">
                   <select
                     value={selectedPrice}
                     onChange={(e) => setSelectedPrice(e.target.value)}
-                    className="w-44 appearance-none rounded-lg border border-gray-300 bg-white p-2 pr-9 font-normal text-black cursor-pointer"
+                    className="w-46 appearance-none rounded-lg border border-gray-300 bg-white p-2 pr-9 font-normal text-black cursor-pointer"
                   >
                     <option value="" disabled hidden>
                       Price Range
@@ -192,6 +199,7 @@ export default function Home() {
               </div>
 
               {/* Clear Filter button */}
+
               <button
                 type="button"
                 onClick={() => {
@@ -216,7 +224,7 @@ export default function Home() {
                 <select
                   value={sortBy}
                   onChange={(event) => setSortBy(event.target.value)}
-                  className="w-44 appearance-none rounded-lg border border-gray-300 bg-white p-2 pr-9 font-normal cursor-pointer"
+                  className="w-46 appearance-none rounded-lg border border-gray-300 bg-white p-2 pr-9 font-normal cursor-pointer"
                 >
                   <option value="az">A-Z</option>
                   <option value="za">Z-A</option>
@@ -229,7 +237,8 @@ export default function Home() {
           </div>
 
           {/* Product Catalog */}
-          <div className="mx-auto mt-8 grid max-w-360 grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+
+          <div className="mt-8 mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {sortedProducts.map((product) => (
               <Link
                 key={product.id}
@@ -247,7 +256,7 @@ export default function Home() {
 
                 <p className="mt-4 min-h-12 line-clamp-2 text-sm font-bold">{product.name}</p>
 
-                <p className="mt-2 text-lg font-bold text-[#9C2327]">
+                <p className="mt-2 font-semibold text-[#9C2327]">
                   ₱
                   {Number(product.price).toLocaleString("en-PH", {
                     minimumFractionDigits: 2,

@@ -26,21 +26,23 @@ export default async function Orders() {
 
   return (
     <div className="min-h-screen bg-[#F2F2F2]">
-      <header className="flex items-center bg-black px-42 py-4">
-        <div className="flex items-center gap-4">
-          <Link href="/">
-            <Image
-              src="/logos/shoezam-logo.png"
-              alt="ShoeZam logo"
-              width={90}
-              height={90}
-              className="cursor-pointer"
-            />
-          </Link>
+      <header className="bg-black">
+        <div className="header flex items-center justify-between gap-4 p-4">
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <Image
+                src="/logos/shoezam-logo.png"
+                alt="ShoeZam logo"
+                width={90}
+                height={90}
+                className="cursor-pointer"
+              />
+            </Link>
 
-          <span className="text-3xl">|</span>
+            <span className="text-3xl">|</span>
 
-          <h2 className="text-lg">My Orders</h2>
+            <h2 className="text-lg">My Orders</h2>
+          </div>
         </div>
       </header>
 

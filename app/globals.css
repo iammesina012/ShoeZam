@@ -26,11 +26,26 @@ body {
 }
 
 main {
-  padding-inline: 1rem;
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 8rem;
 }
 
-@media (min-width: 1024px) {
-  main {
-    padding-inline: 10rem;
+.header {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 8rem;
+}
+
+@media (max-width: 1023px) {
+  main,
+  .header {
+    padding-inline: 2rem;
   }
+}
+
+html {
+  overflow-y: scroll;
 }

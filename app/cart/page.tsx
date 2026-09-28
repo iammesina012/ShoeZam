@@ -49,30 +49,32 @@ export default function ShoppingBag() {
   return (
     <div className="min-h-screen bg-[#F2F2F2]">
       {/* Header */}
-      <header className="flex items-center justify-between bg-black px-42 py-4">
-        <div className="flex items-center gap-4 ">
-          <Link href="/">
-            <Image
-              src="/logos/shoezam-logo.png"
-              alt="ShoeZam logo"
-              width={90}
-              height={90}
-              className="cursor-pointer"
+      <header className="bg-black">
+        <div className="header flex items-center justify-between gap-4 p-4">
+          <div className="flex items-center gap-4">
+            <Link href="/">
+              <Image
+                src="/logos/shoezam-logo.png"
+                alt="ShoeZam logo"
+                width={90}
+                height={90}
+                className="cursor-pointer"
+              />
+            </Link>
+
+            <span className="text-3xl">|</span>
+
+            <h2 className="text-lg">Shopping Bag</h2>
+          </div>
+
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search in Shoezam"
+              className="w-146 rounded-lg bg-white p-3 placeholder:text-sm text-black placeholder:text-[#858585]"
             />
-          </Link>
-
-          <span className="text-3xl">|</span>
-
-          <h2 className="text-lg">Shopping Bag</h2>
-        </div>
-
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search your shoes..."
-            className="w-146 rounded-lg border p-3"
-          />
-          <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2" />
+            <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-black" />
+          </div>
         </div>
       </header>
 
@@ -81,7 +83,7 @@ export default function ShoppingBag() {
         {products && products.length > 0 && (
           <>
             {/* Columns */}
-            <section className="w-full p-4 mt-4 bg-white">
+            <section className="p-4 mt-4 bg-white">
               <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] items-center justify-items-center">
                 <div className="flex items-center gap-4 justify-self-start">
                   <input
@@ -111,7 +113,7 @@ export default function ShoppingBag() {
             </section>
 
             {/* Products section */}
-            <section className="w-full mt-4">
+            <section className="mt-4">
               {Object.entries(groupedProducts).map(([brand, brandProducts]: [string, any]) => (
                 <section key={brand} className="w-full mb-4 bg-white">
                   {/* Brand header */}
@@ -268,7 +270,7 @@ export default function ShoppingBag() {
               ))}
             </section>
 
-            <section className="w-full mt-4 bg-white p-4">
+            <section className="mt-4 bg-white p-4">
               <div className="grid grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr] items-center justify-items-center">
                 <span className="col-span-4"></span>
 

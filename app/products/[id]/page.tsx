@@ -28,6 +28,7 @@ export default async function Products({ params }: ProductPageProps) {
               />
             </div>
           </section>
+
           {/* Product Details + Add to bag button */}
           <section className="flex flex-col flex-1 justify-center">
             <span className="w-fit rounded-full bg-[#E5E5E5] mt-4 px-4 py-2 text-sm font-semibold text-black">

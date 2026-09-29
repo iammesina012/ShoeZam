@@ -64,23 +64,23 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden items-center gap-4 text-white lg:flex lg:gap-6">
-            <Link href="/brands/adidas" className="hover:text-[#9C2327]">
+            <Link href="/brands/adidas" className="transition hover:text-[#9C2327]">
               Adidas
             </Link>
 
-            <Link href="/brands/converse" className="hover:text-[#9C2327]">
+            <Link href="/brands/converse" className="transition hover:text-[#9C2327]">
               Converse
             </Link>
 
-            <Link href="/brands/new-balance" className="hover:text-[#9C2327]">
+            <Link href="/brands/new-balance" className="transition hover:text-[#9C2327]">
               New Balance
             </Link>
 
-            <Link href="/brands/nike" className="hover:text-[#9C2327]">
+            <Link href="/brands/nike" className="transition hover:text-[#9C2327]">
               Nike
             </Link>
 
-            <Link href="/brands/vans" className="hover:text-[#9C2327]">
+            <Link href="/brands/vans" className="transition   hover:text-[#9C2327]">
               Vans
             </Link>
           </nav>

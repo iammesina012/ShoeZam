@@ -1,14 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function PaymentMethodTab() {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentType, setPaymentType] = useState("card");
+  const [editingPayment, setEditingPayment] = useState<string | null>(null);
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [paymentToDelete, setPaymentToDelete] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [paymentMethods, setPaymentMethods] = useState<
     {
-      id: number;
+      id: string;
       type: "card" | "gcash";
       last4?: string;
       expiry?: string;
@@ -23,14 +29,37 @@ export default function PaymentMethodTab() {
   const [gcashNumber, setGcashNumber] = useState("");
 
   useEffect(() => {
-    const savedPayments = localStorage.getItem("paymentMethods");
+    const loadPaymentMethods = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-    if (savedPayments) {
-      setPaymentMethods(JSON.parse(savedPayments));
-    }
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("payment_methods")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error loading payment methods:", error);
+        return;
+      }
+
+      setPaymentMethods(data);
+    };
+
+    loadPaymentMethods();
   }, []);
 
-  const handleAddPayment = () => {
+  const handleAddPayment = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) return;
+
     if (paymentType === "card") {
       const cleanCardNumber = cardNumber.replace(/\s/g, "");
 
@@ -38,18 +67,52 @@ export default function PaymentMethodTab() {
         return;
       }
 
-      const newPayment = {
-        id: Date.now(),
-        type: "card" as const,
-        last4: cleanCardNumber.slice(-4),
-        expiry: expiryDate,
-        name: cardName,
-      };
+      // EDIT
+      if (editingPayment) {
+        const { data, error } = await supabase
+          .from("payment_methods")
+          .update({
+            type: "card",
+            last4: cleanCardNumber.slice(-4),
+            expiry: expiryDate,
+            name: cardName,
+          })
+          .eq("id", editingPayment)
+          .eq("user_id", user.id)
+          .select()
+          .single();
 
-      const updatedPayments = [...paymentMethods, newPayment];
+        if (error) {
+          console.error("Error updating card:", error);
+          return;
+        }
 
-      setPaymentMethods(updatedPayments);
-      localStorage.setItem("paymentMethods", JSON.stringify(updatedPayments));
+        setPaymentMethods((current) =>
+          current.map((payment) => (payment.id === editingPayment ? data : payment)),
+        );
+      }
+
+      // ADD
+      else {
+        const { data, error } = await supabase
+          .from("payment_methods")
+          .insert({
+            user_id: user.id,
+            type: "card",
+            last4: cleanCardNumber.slice(-4),
+            expiry: expiryDate,
+            name: cardName,
+          })
+          .select()
+          .single();
+
+        if (error) {
+          console.error("Error adding card:", error);
+          return;
+        }
+
+        setPaymentMethods((current) => [...current, data]);
+      }
     }
 
     if (paymentType === "gcash") {
@@ -57,19 +120,52 @@ export default function PaymentMethodTab() {
         return;
       }
 
-      const newPayment = {
-        id: Date.now(),
-        type: "gcash" as const,
-        phone: gcashNumber,
-      };
+      // EDIT
+      if (editingPayment) {
+        const { data, error } = await supabase
+          .from("payment_methods")
+          .update({
+            type: "gcash",
+            phone: gcashNumber,
+          })
+          .eq("id", editingPayment)
+          .eq("user_id", user.id)
+          .select()
+          .single();
 
-      const updatedPayments = [...paymentMethods, newPayment];
+        if (error) {
+          console.error("Error updating GCash:", error);
+          return;
+        }
 
-      setPaymentMethods(updatedPayments);
-      localStorage.setItem("paymentMethods", JSON.stringify(updatedPayments));
+        setPaymentMethods((current) =>
+          current.map((payment) => (payment.id === editingPayment ? data : payment)),
+        );
+      }
+
+      // ADD
+      else {
+        const { data, error } = await supabase
+          .from("payment_methods")
+          .insert({
+            user_id: user.id,
+            type: "gcash",
+            phone: gcashNumber,
+          })
+          .select()
+          .single();
+
+        if (error) {
+          console.error("Error adding GCash:", error);
+          return;
+        }
+
+        setPaymentMethods((current) => [...current, data]);
+      }
     }
 
     setShowPaymentModal(false);
+    setEditingPayment(null);
 
     setCardNumber("");
     setExpiryDate("");
@@ -77,11 +173,22 @@ export default function PaymentMethodTab() {
     setGcashNumber("");
   };
 
-  const handleDeletePayment = (id: number) => {
-    const updatedPayments = paymentMethods.filter((payment) => payment.id !== id);
+  const handleDeletePayment = async (id: string) => {
+    setIsDeleting(true);
 
-    setPaymentMethods(updatedPayments);
-    localStorage.setItem("paymentMethods", JSON.stringify(updatedPayments));
+    const { error } = await supabase.from("payment_methods").delete().eq("id", id);
+
+    if (error) {
+      console.error("Error deleting payment method:", error);
+      setIsDeleting(false);
+      return;
+    }
+
+    setPaymentMethods((current) => current.filter((payment) => payment.id !== id));
+
+    setIsDeleting(false);
+    setShowDeleteModal(false);
+    setPaymentToDelete(null);
   };
 
   return (
@@ -97,7 +204,17 @@ export default function PaymentMethodTab() {
 
         <button
           type="button"
-          onClick={() => setShowPaymentModal(true)}
+          onClick={() => {
+            setEditingPayment(null);
+
+            setPaymentType("card");
+            setCardNumber("");
+            setExpiryDate("");
+            setCardName("");
+            setGcashNumber("");
+
+            setShowPaymentModal(true);
+          }}
           className="w-fit rounded-lg bg-[#9C2327] px-5 py-3 font-semibold text-white transition hover:bg-[#7F1D20] cursor-pointer"
         >
           + Add Payment Method
@@ -146,6 +263,24 @@ export default function PaymentMethodTab() {
                   <div className="flex shrink-0 items-center gap-4">
                     <button
                       type="button"
+                      onClick={() => {
+                        setEditingPayment(payment.id);
+                        setPaymentType(payment.type);
+
+                        if (payment.type === "card") {
+                          setCardNumber("");
+                          setExpiryDate(payment.expiry || "");
+                          setCardName(payment.name || "");
+                          setGcashNumber("");
+                        } else {
+                          setGcashNumber(payment.phone || "");
+                          setCardNumber("");
+                          setExpiryDate("");
+                          setCardName("");
+                        }
+
+                        setShowPaymentModal(true);
+                      }}
                       className="font-semibold text-[#9C2327] transition hover:opacity-70 cursor-pointer"
                     >
                       Edit
@@ -154,7 +289,10 @@ export default function PaymentMethodTab() {
                     <span className="border-l-2 border-[#DBDBDB] pl-4 text-[#858585]">
                       <button
                         type="button"
-                        onClick={() => handleDeletePayment(payment.id)}
+                        onClick={() => {
+                          setPaymentToDelete(payment.id);
+                          setShowDeleteModal(true);
+                        }}
                         className="font-semibold text-[#9C2327] transition hover:opacity-70 cursor-pointer"
                       >
                         Delete
@@ -174,7 +312,9 @@ export default function PaymentMethodTab() {
           <div className="w-full max-w-md rounded-xl bg-white shadow-lg">
             {/* Modal Header */}
             <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-              <h3 className="text-lg font-semibold text-black">Add Payment Method</h3>
+              <h3 className="text-lg font-semibold text-black">
+                {editingPayment ? "Edit Payment Method" : "Add Payment Method"}
+              </h3>
 
               <button
                 type="button"
@@ -313,7 +453,46 @@ export default function PaymentMethodTab() {
                 onClick={handleAddPayment}
                 className="rounded-lg bg-[#9C2327] px-5 py-3 font-semibold text-white transition hover:bg-[#7F1D20] cursor-pointer"
               >
-                Add
+                {editingPayment ? "Save Changes" : "Add"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-lg">
+            <h2 className="text-lg font-semibold text-black">Delete Payment Method?</h2>
+
+            <p className="mt-2 text-sm text-[#858585]">
+              Are you sure you want to delete this payment method?
+            </p>
+
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setPaymentToDelete(null);
+                }}
+                disabled={isDeleting}
+                className="rounded-lg border border-[#DBDBDB] px-5 py-2 text-sm font-semibold text-[#858585] transition hover:bg-[#F5F5F5] disabled:opacity-50"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (paymentToDelete) {
+                    handleDeletePayment(paymentToDelete);
+                  }
+                }}
+                disabled={isDeleting}
+                className="rounded-lg bg-[#9C2327] px-5 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
+              >
+                {isDeleting ? "Deleting..." : "Delete"}
               </button>
             </div>
           </div>

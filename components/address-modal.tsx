@@ -1,10 +1,29 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+
+type Address = {
+  id: string;
+  full_name: string;
+  phone_number: string;
+  location: string;
+  street_address: string;
+  postal_code: string;
+  created_at: string;
+};
+
+type CheckoutAddress = {
+  fullName: string;
+  phoneNumber: string;
+  location: string;
+  postalCode: string;
+  streetAddress: string;
+};
 
 type AddressModalProps = {
   onClose: () => void;
-  onSelectAddress: (address: any) => void;
+  onSelectAddress: (address: CheckoutAddress) => void;
 };
 
 export default function AddressModal({ onClose, onSelectAddress }: AddressModalProps) {
@@ -16,34 +35,134 @@ export default function AddressModal({ onClose, onSelectAddress }: AddressModalP
   const [postalCode, setPostalCode] = useState("");
   const [streetAddress, setStreetAddress] = useState("");
 
-  const [addresses, setAddresses] = useState<any[]>([]);
-  const [selectedAddress, setSelectedAddress] = useState<number | null>(null);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [addresses, setAddresses] = useState<Address[]>([]);
+  const [selectedAddress, setSelectedAddress] = useState<string | null>(null);
+  const [editingAddress, setEditingAddress] = useState<Address | null>(null);
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    const savedAddresses = localStorage.getItem("deliveryAddresses");
-    const savedSelectedAddress = localStorage.getItem("selectedDeliveryAddress");
+    const loadAddresses = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-    if (savedAddresses) {
-      setAddresses(JSON.parse(savedAddresses));
-    }
-
-    if (savedSelectedAddress && savedAddresses) {
-      const selected = JSON.parse(savedSelectedAddress);
-      const savedAddressList = JSON.parse(savedAddresses);
-
-      const selectedIndex = savedAddressList.findIndex(
-        (address: any) =>
-          address.fullName === selected.fullName &&
-          address.phoneNumber === selected.phoneNumber &&
-          address.streetAddress === selected.streetAddress,
-      );
-
-      if (selectedIndex !== -1) {
-        setSelectedAddress(selectedIndex);
+      if (!user) {
+        setLoading(false);
+        return;
       }
-    }
+
+      const { data, error } = await supabase
+        .from("addresses")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: true });
+
+      if (error) {
+        console.error(error);
+        setLoading(false);
+        return;
+      }
+
+      setAddresses(data || []);
+      setLoading(false);
+    };
+
+    loadAddresses();
   }, []);
+
+  const clearForm = () => {
+    setFullName("");
+    setPhoneNumber("");
+    setLocation("");
+    setPostalCode("");
+    setStreetAddress("");
+    setEditingAddress(null);
+  };
+
+  const handleAddAddress = () => {
+    clearForm();
+    setShowNewAddress(true);
+  };
+
+  const handleEditAddress = (address: Address) => {
+    setEditingAddress(address);
+    setFullName(address.full_name);
+    setPhoneNumber(address.phone_number);
+    setLocation(address.location);
+    setPostalCode(address.postal_code);
+    setStreetAddress(address.street_address);
+    setShowNewAddress(true);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setSaving(true);
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      setSaving(false);
+      return;
+    }
+
+    const addressData = {
+      full_name: fullName.trim(),
+      phone_number: phoneNumber.trim(),
+      location: location.trim(),
+      street_address: streetAddress.trim(),
+      postal_code: postalCode.trim(),
+    };
+
+    if (editingAddress) {
+      const { data, error } = await supabase
+        .from("addresses")
+        .update(addressData)
+        .eq("id", editingAddress.id)
+        .select()
+        .single();
+
+      if (error) {
+        console.error(error);
+        setSaving(false);
+        return;
+      }
+
+      setAddresses((currentAddresses) =>
+        currentAddresses.map((address) => (address.id === editingAddress.id ? data : address)),
+      );
+    } else {
+      const { data, error } = await supabase
+        .from("addresses")
+        .insert({
+          user_id: user.id,
+          ...addressData,
+        })
+        .select()
+        .single();
+
+      if (error) {
+        console.error(error);
+        setSaving(false);
+        return;
+      }
+
+      setAddresses((currentAddresses) => [...currentAddresses, data]);
+    }
+
+    clearForm();
+    setShowNewAddress(false);
+    setSaving(false);
+  };
+
+  const handleCancel = () => {
+    clearForm();
+    setShowNewAddress(false);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
@@ -55,7 +174,7 @@ export default function AddressModal({ onClose, onSelectAddress }: AddressModalP
           <button
             type="button"
             onClick={onClose}
-            className="text-5xl font-light text-[#858585] cursor-pointer"
+            className="cursor-pointer text-5xl font-light text-[#858585]"
           >
             ×
           </button>
@@ -63,35 +182,10 @@ export default function AddressModal({ onClose, onSelectAddress }: AddressModalP
 
         {showNewAddress ? (
           <>
-            {/* New Address Form */}
+            {/* New / Edit Address Form */}
             <form
               id="address-form"
-              onSubmit={(e) => {
-                e.preventDefault();
-
-                const newAddress = {
-                  fullName: fullName.trim(),
-                  phoneNumber: phoneNumber.trim(),
-                  location: location.trim(),
-                  postalCode: postalCode.trim(),
-                  streetAddress: streetAddress.trim(),
-                };
-
-                let updatedAddresses;
-
-                if (editingIndex !== null) {
-                  updatedAddresses = [...addresses];
-                  updatedAddresses[editingIndex] = newAddress;
-                } else {
-                  updatedAddresses = [...addresses, newAddress];
-                }
-
-                localStorage.setItem("deliveryAddresses", JSON.stringify(updatedAddresses));
-
-                setAddresses(updatedAddresses);
-                setEditingIndex(null);
-                setShowNewAddress(false);
-              }}
+              onSubmit={handleSubmit}
               className="flex flex-1 flex-col gap-4 p-6"
             >
               <div className="grid grid-cols-2 gap-4">
@@ -166,11 +260,8 @@ export default function AddressModal({ onClose, onSelectAddress }: AddressModalP
             <div className="flex justify-end gap-4 border-t border-gray-200 p-6">
               <button
                 type="button"
-                onClick={() => {
-                  setEditingIndex(null);
-                  setShowNewAddress(false);
-                }}
-                className="rounded-lg px-6 py-3 text-black cursor-pointer"
+                onClick={handleCancel}
+                className="cursor-pointer rounded-lg px-6 py-3 text-black"
               >
                 Cancel
               </button>
@@ -178,64 +269,68 @@ export default function AddressModal({ onClose, onSelectAddress }: AddressModalP
               <button
                 type="submit"
                 form="address-form"
-                className="rounded-lg bg-[#9C2327] px-6 py-3 text-white cursor-pointer"
+                disabled={saving}
+                className="cursor-pointer rounded-lg bg-[#9C2327] px-6 py-3 text-white disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Submit
+                {saving ? "Saving..." : editingAddress ? "Save Changes" : "Submit"}
               </button>
             </div>
           </>
         ) : (
           <>
-            {/* No Address */}
+            {/* Address List */}
             <div className="flex min-h-0 flex-1 flex-col">
-              {addresses.length > 0 ? (
+              {loading ? (
+                <div className="flex flex-1 items-center justify-center">
+                  <p className="text-gray-500">Loading addresses...</p>
+                </div>
+              ) : addresses.length > 0 ? (
                 <div className="min-h-0 flex-1 overflow-auto">
-                  {addresses.map((address, index) => (
+                  {addresses.map((address) => (
                     <div
-                      key={index}
+                      key={address.id}
                       className="flex w-full items-start gap-4 p-6 text-sm text-black"
                     >
-                      <label className="flex flex-1 items-start gap-4 cursor-pointer">
+                      <label className="flex flex-1 cursor-pointer items-start gap-4">
                         <input
                           type="radio"
                           name="address"
-                          checked={selectedAddress === index}
+                          checked={selectedAddress === address.id}
                           onChange={() => {
-                            setSelectedAddress(index);
-                            onSelectAddress(address);
+                            setSelectedAddress(address.id);
+
+                            onSelectAddress({
+                              fullName: address.full_name,
+                              phoneNumber: address.phone_number,
+                              location: address.location,
+                              postalCode: address.postal_code,
+                              streetAddress: address.street_address,
+                            });
                           }}
                           className="mt-1 accent-[#9C2327]"
                         />
 
                         <div className="flex-1">
                           <div className="flex items-center gap-3">
-                            <p className="font-semibold">{address.fullName}</p>
+                            <p className="font-semibold">{address.full_name}</p>
 
                             <span className="border-l border-gray-300 pl-3 text-[#858585]">
-                              {address.phoneNumber}
+                              {address.phone_number}
                             </span>
                           </div>
 
-                          <p className="mt-1 text-[#858585]">{address.streetAddress}</p>
+                          <p className="mt-1 text-[#858585]">{address.street_address}</p>
 
                           <p className="text-[#858585]">
-                            {address.location}, {address.postalCode}
+                            {address.location}, {address.postal_code}
                           </p>
                         </div>
                       </label>
 
                       <button
                         type="button"
-                        onClick={() => {
-                          setEditingIndex(index);
-                          setFullName(address.fullName);
-                          setPhoneNumber(address.phoneNumber);
-                          setLocation(address.location);
-                          setPostalCode(address.postalCode);
-                          setStreetAddress(address.streetAddress);
-                          setShowNewAddress(true);
-                        }}
-                        className="font-semibold text-blue-500 cursor-pointer"
+                        onClick={() => handleEditAddress(address)}
+                        className="cursor-pointer font-semibold text-blue-500"
                       >
                         Edit
                       </button>
@@ -252,16 +347,8 @@ export default function AddressModal({ onClose, onSelectAddress }: AddressModalP
               <div className="flex justify-end border-t border-gray-200 p-6">
                 <button
                   type="button"
-                  onClick={() => {
-                    setEditingIndex(null);
-                    setFullName("");
-                    setPhoneNumber("");
-                    setLocation("");
-                    setPostalCode("");
-                    setStreetAddress("");
-                    setShowNewAddress(true);
-                  }}
-                  className="rounded-lg bg-[#9C2327] px-6 py-3 text-white cursor-pointer"
+                  onClick={handleAddAddress}
+                  className="cursor-pointer rounded-lg bg-[#9C2327] px-6 py-3 text-white"
                 >
                   + Add New Address
                 </button>

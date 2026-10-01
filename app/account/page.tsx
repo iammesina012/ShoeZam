@@ -1,95 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import ProfileTab from "@/components/account/profile";
 import PasswordTab from "@/components/account/password";
 import AddressesTab from "@/components/account/addresses";
-import PaymentMethodsTab from "@/components/account/payment-methods";
+import PaymentMethodTab from "@/components/account/payment-method";
 import PrivacyTab from "@/components/account/privacy";
+import OrdersTab from "@/components/account/orders";
 
 export default function Account() {
-  const [activeTab, setActiveTab] = useState("profile");
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [paymentType, setPaymentType] = useState("card");
+  const searchParams = useSearchParams();
 
-  const [paymentMethods, setPaymentMethods] = useState<
-    {
-      id: number;
-      type: "card" | "gcash";
-      last4?: string;
-      expiry?: string;
-      name?: string;
-      phone?: string;
-    }[]
-  >([]);
-
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiryDate, setExpiryDate] = useState("");
-  const [cardName, setCardName] = useState("");
-  const [gcashNumber, setGcashNumber] = useState("");
-
-  useEffect(() => {
-    const savedPayments = localStorage.getItem("paymentMethods");
-
-    if (savedPayments) {
-      setPaymentMethods(JSON.parse(savedPayments));
-    }
-  }, []);
-
-  const handleAddPayment = () => {
-    if (paymentType === "card") {
-      const cleanCardNumber = cardNumber.replace(/\s/g, "");
-
-      if (!cleanCardNumber || !expiryDate || !cardName) {
-        return;
-      }
-
-      const newPayment = {
-        id: Date.now(),
-        type: "card" as const,
-        last4: cleanCardNumber.slice(-4),
-        expiry: expiryDate,
-        name: cardName,
-      };
-
-      const updatedPayments = [...paymentMethods, newPayment];
-
-      setPaymentMethods(updatedPayments);
-      localStorage.setItem("paymentMethods", JSON.stringify(updatedPayments));
-    }
-
-    if (paymentType === "gcash") {
-      if (!gcashNumber) {
-        return;
-      }
-
-      const newPayment = {
-        id: Date.now(),
-        type: "gcash" as const,
-        phone: gcashNumber,
-      };
-
-      const updatedPayments = [...paymentMethods, newPayment];
-
-      setPaymentMethods(updatedPayments);
-      localStorage.setItem("paymentMethods", JSON.stringify(updatedPayments));
-    }
-
-    setShowPaymentModal(false);
-
-    setCardNumber("");
-    setExpiryDate("");
-    setCardName("");
-    setGcashNumber("");
-  };
-
-  const handleDeletePayment = (id: number) => {
-    const updatedPayments = paymentMethods.filter((payment) => payment.id !== id);
-
-    setPaymentMethods(updatedPayments);
-
-    localStorage.setItem("paymentMethods", JSON.stringify(updatedPayments));
-  };
+  const [activeTab, setActiveTab] = useState(searchParams.get("tab") || "profile");
 
   return (
     <div className="min-h-screen bg-[#F2F2F2] py-8">
@@ -145,14 +68,14 @@ export default function Account() {
               {/* E-Wallets & Cards */}
               <button
                 type="button"
-                onClick={() => setActiveTab("wallets")}
+                onClick={() => setActiveTab("payment-method")}
                 className={`border-b-2 px-4 py-4 text-sm font-semibold transition ${
                   activeTab === "wallets"
                     ? "border-[#9C2327] text-[#9C2327]"
                     : "border-transparent text-[#858585] hover:text-black"
                 }`}
               >
-                E-Wallets & Cards
+                Payment Method
               </button>
 
               {/* Privacy */}
@@ -190,17 +113,9 @@ export default function Account() {
             {activeTab === "profile" && <ProfileTab />}
             {activeTab === "password" && <PasswordTab />}
             {activeTab === "addresses" && <AddressesTab />}
-            {activeTab === "payment-methods" && <PaymentMethodsTab />}
+            {activeTab === "payment-method" && <PaymentMethodTab />}
             {activeTab === "privacy" && <PrivacyTab />}
-
-            {/* Orders */}
-            {activeTab === "orders" && (
-              <div>
-                <h2 className="text-xl font-bold text-black">My Orders</h2>
-
-                <p className="mt-1 text-sm text-[#858585]">Track and manage your orders.</p>
-              </div>
-            )}
+            {activeTab === "orders" && <OrdersTab />}
           </div>
         </div>
       </main>

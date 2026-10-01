@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-export default function PaymentMethodsTab() {
+export default function PaymentMethodTab() {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentType, setPaymentType] = useState("card");
 

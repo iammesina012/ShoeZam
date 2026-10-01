@@ -35,7 +35,7 @@ export default function OrderConfirmation() {
 
           <div className="mt-6 flex gap-4">
             <Link
-              href="/orders"
+              href="/account?tab=orders"
               className="rounded-lg border border-[#9C2327] px-8 py-4 font-semibold text-[#9C2327] hover:bg-[#9C2327] hover:text-white"
             >
               View Order

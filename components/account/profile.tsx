@@ -1,6 +1,26 @@
+"use client";
+
+import { useState } from "react";
 import { FiUpload } from "react-icons/fi";
 
 export default function ProfileTab() {
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  const handleProfileImage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      return;
+    }
+
+    const imageUrl = URL.createObjectURL(file);
+
+    setProfileImage(imageUrl);
+  };
   return (
     <div>
       <h2 className="text-xl font-bold text-black">My Profile</h2>
@@ -12,18 +32,33 @@ export default function ProfileTab() {
         <h3 className="text-sm font-semibold text-black">Profile Picture</h3>
 
         <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-center">
-          <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full bg-[#F2F2F2]">
-            <span className="text-2xl font-bold text-[#858585]">M</span>
+          {/* Profile Picture */}
+          <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#F2F2F2]">
+            {profileImage ? (
+              <img src={profileImage} alt="Profile" className="h-full w-full object-cover" />
+            ) : (
+              <span className="text-2xl font-bold text-[#858585]"></span>
+            )}
           </div>
 
           <div>
-            <button
-              type="button"
-              className="flex items-center gap-2 rounded-lg border border-[#DBDBDB] px-4 py-2 text-sm font-semibold text-black transition hover:border-[#9C2327] hover:text-[#9C2327]"
+            {/* Hidden File Input */}
+            <input
+              type="file"
+              accept="image/png, image/jpeg"
+              id="profile-image"
+              className="hidden"
+              onChange={handleProfileImage}
+            />
+
+            {/* Upload Button */}
+            <label
+              htmlFor="profile-image"
+              className="flex w-fit cursor-pointer items-center gap-2 rounded-lg border border-[#DBDBDB] px-4 py-2 text-sm font-semibold text-black transition hover:border-[#9C2327] hover:text-[#9C2327]"
             >
               <FiUpload />
               Upload New Photo
-            </button>
+            </label>
 
             <p className="mt-2 text-xs text-[#858585]">JPG or PNG. Maximum file size: 1 MB.</p>
           </div>

@@ -11,17 +11,26 @@ import { FcGoogle } from "react-icons/fc";
 export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [fullName, setFullName] = useState("");
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleRegister = async () => {
-    const trimmedName = fullName.trim();
+    const trimmedFirstName = firstName.trim();
+    const trimmedLastName = lastName.trim();
     const trimmedEmail = email.trim();
 
-    if (!trimmedName) {
-      alert("Full name is required");
+    if (!trimmedFirstName) {
+      alert("First name is required");
+      return;
+    }
+
+    if (!trimmedLastName) {
+      alert("Last name is required");
       return;
     }
 
@@ -59,6 +68,12 @@ export default function Register() {
       const { error } = await supabase.auth.signUp({
         email: trimmedEmail,
         password,
+        options: {
+          data: {
+            first_name: trimmedFirstName,
+            last_name: trimmedLastName,
+          },
+        },
       });
 
       if (error) {
@@ -71,6 +86,7 @@ export default function Register() {
       alert("A network error occurred. Please try again.");
     }
   };
+
   return (
     <div className="bg-white min-h-screen flex flex-col">
       <header className="header flex items-center gap-4 p-4 bg-white">
@@ -78,7 +94,9 @@ export default function Register() {
 
         <div className="flex items-center gap-4">
           <Image src="/shoezam-logo-black.png" alt="ShoeZam logo" width={90} height={90} />
+
           <span className="text-3xl text-black">|</span>
+
           <span className="text-lg font-bold text-black">Sign Up</span>
         </div>
       </header>
@@ -87,23 +105,36 @@ export default function Register() {
         <div className="max-w-6xl mx-auto flex flex-1">
           <div className="w-1/2 flex flex-col items-center justify-center">
             <Image src="/shoezam-logo.png" alt="ShoeZam logo" width={400} height={400} />
+
             <p className="mt-10 max-w-xs text-xl font-bold text-white text-center">
               The go-to online shop for footwear lovers everywhere.
             </p>
           </div>
 
-          {/* Full Name / Email / Password / Confirm Password */}
+          {/* First Name / Last Name / Email / Password / Confirm Password */}
 
           <div className="w-1/2 flex items-center justify-center">
             <div className="bg-white p-8 rounded-3xl w-full max-w-sm">
               <h2 className="text-xl font-bold text-black">Create an account</h2>
-              <input
-                type="text"
-                placeholder="Full Name"
-                className="w-full mt-5 border border-[#858585] p-3 rounded-lg placeholder:text-sm text-black placeholder:text-[#858585]"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-              />
+
+              <div className="flex gap-3 mt-5">
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  className="w-full border border-[#858585] p-3 rounded-lg placeholder:text-sm text-black placeholder:text-[#858585]"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  className="w-full border border-[#858585] p-3 rounded-lg placeholder:text-sm text-black placeholder:text-[#858585]"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </div>
+
               <input
                 type="email"
                 placeholder="Email (you@example.com)"
@@ -111,6 +142,7 @@ export default function Register() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+
               <div className="relative mt-5">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -119,6 +151,7 @@ export default function Register() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+
                 {showPassword ? (
                   <FaEyeSlash
                     onClick={() => setShowPassword(!showPassword)}
@@ -131,6 +164,7 @@ export default function Register() {
                   />
                 )}
               </div>
+
               <div className="relative mt-5">
                 <input
                   type={showConfirmPassword ? "text" : "password"}
@@ -139,6 +173,7 @@ export default function Register() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
+
                 {showConfirmPassword ? (
                   <FaEyeSlash
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -151,7 +186,9 @@ export default function Register() {
                   />
                 )}
               </div>
+
               {/* Register button */}
+
               <div className="flex items-center mt-4 gap-3">
                 <button
                   type="button"
@@ -161,13 +198,19 @@ export default function Register() {
                   REGISTER
                 </button>
               </div>
+
               {/* Divider with "OR" */}
+
               <div className="flex items-center mt-4 gap-3">
                 <div className="flex-1 border-t border-[#858585]"></div>
+
                 <span className="text-xs text-[#858585]">OR</span>
+
                 <div className="flex-1 border-t border-[#858585]"></div>
               </div>
+
               {/* Third-party accounts button */}
+
               <div className="flex items-center mt-4 gap-3">
                 <button
                   type="button"
@@ -175,6 +218,7 @@ export default function Register() {
                 >
                   <FcGoogle className="text-xl" /> Google
                 </button>
+
                 <button
                   type="button"
                   className="border border-[#858585] rounded-lg p-3 w-full flex items-center justify-center gap-2 text-sm text-black hover:bg-gray-100 cursor-pointer"
@@ -183,9 +227,12 @@ export default function Register() {
                   Facebook
                 </button>
               </div>
-              {/* Sign up */}
+
+              {/* Log in */}
+
               <div className="flex items-center justify-center mt-8 gap-1">
                 <p className="text-xs text-black">Already have an account?</p>
+
                 <Link href="/login" className="text-xs font-bold text-[#9C2327] hover:underline">
                   Log In
                 </Link>

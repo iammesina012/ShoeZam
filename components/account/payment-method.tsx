@@ -40,7 +40,7 @@ export default function PaymentMethodTab() {
         .from("payment_methods")
         .select("*")
         .eq("user_id", user.id)
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: true });
 
       if (error) {
         console.error("Error loading payment methods:", error);
@@ -477,7 +477,7 @@ export default function PaymentMethodTab() {
                   setPaymentToDelete(null);
                 }}
                 disabled={isDeleting}
-                className="rounded-lg border border-[#DBDBDB] px-5 py-2 text-sm font-semibold text-[#858585] transition hover:bg-[#F5F5F5] disabled:opacity-50"
+                className="cursor-pointer rounded-lg border border-[#DBDBDB] px-5 py-3 font-semibold text-black transition hover:bg-[#F2F2F2] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Cancel
               </button>
@@ -490,7 +490,7 @@ export default function PaymentMethodTab() {
                   }
                 }}
                 disabled={isDeleting}
-                className="rounded-lg bg-[#9C2327] px-5 py-2 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-50"
+                className="cursor-pointer rounded-lg bg-[#9C2327] px-5 py-3 font-semibold text-white transition hover:bg-[#7F1D20] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isDeleting ? "Deleting..." : "Delete"}
               </button>

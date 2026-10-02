@@ -10,11 +10,13 @@ export default function ProfileTab() {
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [imageError, setImageError] = useState("");
   const [hasChanges, setHasChanges] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+
   const [savedProfile, setSavedProfile] = useState({
     firstName: "",
     lastName: "",
@@ -113,17 +115,10 @@ export default function ProfileTab() {
   };
 
   const handleSave = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      return;
-    }
-
     const trimmedFirstName = firstName.trim();
     const trimmedLastName = lastName.trim();
     const trimmedPhone = phone.trim();
+    const trimmedEmail = email.trim();
 
     if (!trimmedFirstName) {
       alert("First name is required.");
@@ -140,7 +135,17 @@ export default function ProfileTab() {
       return;
     }
 
-    const trimmedEmail = email.trim();
+    // Start loading only after validation passes
+    setLoading(true);
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     // Update email if it was changed
     if (trimmedEmail !== user.email) {
@@ -149,6 +154,7 @@ export default function ProfileTab() {
       });
 
       if (emailError) {
+        setLoading(false);
         console.error(emailError);
         alert(emailError.message);
         return;
@@ -166,6 +172,7 @@ export default function ProfileTab() {
         });
 
       if (uploadError) {
+        setLoading(false);
         console.error(uploadError);
         setImageError("Failed to upload image.");
         return;
@@ -183,6 +190,7 @@ export default function ProfileTab() {
       });
 
       if (updateError) {
+        setLoading(false);
         console.error(updateError);
         setImageError("Failed to save profile details.");
         return;
@@ -191,7 +199,7 @@ export default function ProfileTab() {
       setProfileImage(`${data.publicUrl}?t=${Date.now()}`);
       setProfileImageFile(null);
     } else {
-      // Update name only
+      // Update profile details
       const { error } = await supabase.auth.updateUser({
         data: {
           first_name: trimmedFirstName,
@@ -201,19 +209,22 @@ export default function ProfileTab() {
       });
 
       if (error) {
+        setLoading(false);
         console.error(error);
         return;
       }
     }
 
     setSavedProfile({
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      email: email.trim(),
-      phone: phone.trim(),
+      firstName: trimmedFirstName,
+      lastName: trimmedLastName,
+      email: trimmedEmail,
+      phone: trimmedPhone,
     });
 
     setHasChanges(false);
+
+    setLoading(false);
   };
 
   return (
@@ -275,7 +286,7 @@ export default function ProfileTab() {
                 setFirstName(value);
               }
             }}
-            className="w-full rounded-lg border border-[#DBDBDB] px-4 py-3 text-sm outline-none transition text-black focus:border-[#9C2327]"
+            className="w-full rounded-lg border border-[#DBDBDB] px-4 py-3 text-sm text-black outline-none transition focus:border-[#9C2327]"
           />
         </div>
 
@@ -293,7 +304,7 @@ export default function ProfileTab() {
                 setLastName(value);
               }
             }}
-            className="w-full rounded-lg border border-[#DBDBDB] px-4 py-3 text-sm outline-none transition text-black focus:border-[#9C2327]"
+            className="w-full rounded-lg border border-[#DBDBDB] px-4 py-3 text-sm text-black outline-none transition focus:border-[#9C2327]"
           />
         </div>
 
@@ -307,7 +318,7 @@ export default function ProfileTab() {
             onChange={(e) => {
               setEmail(e.target.value);
             }}
-            className="w-full rounded-lg border border-[#DBDBDB] px-4 py-3 text-sm outline-none transition text-black focus:border-[#9C2327]"
+            className="w-full rounded-lg border border-[#DBDBDB] px-4 py-3 text-sm text-black outline-none transition focus:border-[#9C2327]"
           />
         </div>
 
@@ -325,7 +336,7 @@ export default function ProfileTab() {
                 setPhone(value);
               }
             }}
-            className="w-full rounded-lg border border-[#DBDBDB] px-4 py-3 text-sm outline-none transition text-black focus:border-[#9C2327]"
+            className="w-full rounded-lg border border-[#DBDBDB] px-4 py-3 text-sm text-black outline-none transition focus:border-[#9C2327]"
           />
         </div>
       </div>
@@ -335,14 +346,14 @@ export default function ProfileTab() {
         <button
           type="button"
           onClick={handleSave}
-          disabled={!hasChanges}
+          disabled={!hasChanges || loading}
           className={`rounded-lg px-6 py-3 font-semibold transition ${
-            hasChanges
+            hasChanges && !loading
               ? "cursor-pointer bg-[#9C2327] text-white hover:bg-[#7F1D20]"
               : "cursor-not-allowed bg-[#DBDBDB] text-[#858585]"
           }`}
         >
-          Save Details
+          {loading ? "Saving..." : "Save Details"}
         </button>
       </div>
     </div>

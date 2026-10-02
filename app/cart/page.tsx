@@ -66,15 +66,6 @@ export default function ShoppingBag() {
 
             <h2 className="text-lg">Shopping Bag</h2>
           </div>
-
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search in Shoezam"
-              className="w-146 rounded-lg bg-white p-3 placeholder:text-sm text-black placeholder:text-[#858585]"
-            />
-            <FaSearch className="absolute right-5 top-1/2 -translate-y-1/2 text-black" />
-          </div>
         </div>
       </header>
 

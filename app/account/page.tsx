@@ -78,7 +78,7 @@ export default function Account() {
                 Payment Method
               </button>
 
-              {/* Privacy */}
+              {/* Privacy
               <button
                 type="button"
                 onClick={() => setActiveTab("privacy")}
@@ -89,7 +89,7 @@ export default function Account() {
                 }`}
               >
                 Privacy
-              </button>
+              </button> */}
 
               <span className="flex items-center px-4 text-2xl text-[#DBDBDB]">|</span>
 
@@ -114,7 +114,7 @@ export default function Account() {
             {activeTab === "password" && <PasswordTab />}
             {activeTab === "addresses" && <AddressesTab />}
             {activeTab === "payment-method" && <PaymentMethodTab />}
-            {activeTab === "privacy" && <PrivacyTab />}
+            {/* {activeTab === "privacy" && <PrivacyTab />} */}
             {activeTab === "orders" && <OrdersTab />}
           </div>
         </div>

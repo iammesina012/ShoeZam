@@ -30,7 +30,7 @@ export default function Footer() {
             Shopping Bag
           </Link>
 
-          <Link href="/orders" className="text-center transition hover:text-[#9C2327]">
+          <Link href="/account?tab=orders" className="text-center transition hover:text-[#9C2327]">
             Orders
           </Link>
         </nav>

@@ -2,24 +2,35 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { FaBars, FaUserCircle, FaShoppingBag } from "react-icons/fa";
 import { FiTag, FiUser, FiShoppingBag, FiLogOut, FiChevronDown, FiChevronUp } from "react-icons/fi";
+import { supabase } from "@/lib/supabaseClient";
 
 export default function Header() {
   const pathname = usePathname();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [brandsOpen, setBrandsOpen] = useState(false);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadProfileImage = async () => {
+      const { data: { user} } = await supabase.auth.getUser();
+      if (user?.user_metadata?.avatar_url) {
+        setProfileImage(`${user.user_metadata.avatar_url}?t=${Date.now()}`);
+      }
+    };
+    loadProfileImage();
+  }, []);
 
   if (
     pathname === "/login" ||
     pathname === "/register" ||
     pathname === "/cart" ||
     pathname === "/checkout" ||
-    pathname === "/order-confirmation" ||
-    pathname === "/orders"
+    pathname === "/order-confirmation"
   ) {
     return null;
   }
@@ -94,7 +105,19 @@ export default function Header() {
           </Link>
 
           {/* Profile - Desktop only */}
-          <FaUserCircle className="hidden cursor-pointer lg:block" />
+          <Link href="/account">
+            {profileImage ? (
+              <Image
+                src={profileImage}
+                alt="Profile"
+                className="hidden cursor-pointer lg:block h-8 w-8 rounded-full object-cover"
+                width={40}
+                height={40}
+              />
+            ) : (
+              <FaUserCircle className="hidden cursor-pointer lg:block" />
+            )}
+          </Link>
         </div>
       </div>
 
@@ -108,7 +131,17 @@ export default function Header() {
           <aside className="fixed left-0 top-0 z-50 flex h-screen w-72 flex-col bg-white p-6 text-black shadow-xl">
             {/* Profile */}
             <div className="flex items-center gap-3">
-              <FaUserCircle className="text-4xl text-[#858585]" />
+              {profileImage ? (
+                <Image
+                  src={profileImage}
+                  alt="Profile"
+                  className="rounded-full object-cover"
+                  width={40}
+                  height={40}
+                />
+              ) : (
+                <FaUserCircle className="text-4xl text-[#858585]" />
+              )}
 
               <p className="font-semibold">Michael William Mesina</p>
             </div>

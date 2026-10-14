@@ -7,17 +7,14 @@ import { supabase } from "@/lib/supabaseClient";
 import { FaChevronDown, FaTimes, FaFilter, FaSlidersH } from "react-icons/fa";
 
 export default function Home() {
-  const brands = [
-    { name: "Adidas", href: "/brands/adidas", logo: "/logos/adidas-logo.png" },
-    { name: "Converse", href: "/brands/converse", logo: "/logos/converse-logo.png" },
-    { name: "New Balance", href: "/brands/new-balance", logo: "/logos/newbalance-logo.png" },
-    { name: "Nike", href: "/brands/nike", logo: "/logos/nike-logo.png" },
-    { name: "Vans", href: "/brands/vans", logo: "/logos/vans-logo.png" },
-  ];
-
+  // State variables
   const [products, setProducts] = useState<any[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedPrice, setSelectedPrice] = useState("");
+  const [sortBy, setSortBy] = useState("");
 
+  // Fetch products from Supabase
   useEffect(() => {
     const fetchProducts = async () => {
       const { data, error } = await supabase.from("products").select("*");
@@ -32,37 +29,51 @@ export default function Home() {
     fetchProducts();
   }, []);
 
-  const [selectedBrand, setSelectedBrand] = useState("");
-  const [selectedPrice, setSelectedPrice] = useState("");
+  // Brand data
+  const brands = [
+    { name: "Adidas", href: "/brands/adidas", logo: "/logos/adidas-logo.png" },
+    { name: "Converse", href: "/brands/converse", logo: "/logos/converse-logo.png" },
+    { name: "New Balance", href: "/brands/new-balance", logo: "/logos/newbalance-logo.png" },
+    { name: "Nike", href: "/brands/nike", logo: "/logos/nike-logo.png" },
+    { name: "Vans", href: "/brands/vans", logo: "/logos/vans-logo.png" },
+  ];
 
+  // Filter (Brand & Price Range)
   const filteredProducts = products.filter((product) => {
     const matchesBrand = selectedBrand ? product.brand === selectedBrand : true;
 
     let matchesPrice = true;
-    if (selectedPrice === "under-2000") matchesPrice = product.price < 2000;
-    if (selectedPrice === "2000-5000")
+
+    if (selectedPrice === "under-2000") {
+      matchesPrice = product.price < 2000;
+    } else if (selectedPrice === "2000-5000") {
       matchesPrice = product.price >= 2000 && product.price <= 5000;
-    if (selectedPrice === "5000-10000")
+    } else if (selectedPrice === "5000-10000") {
       matchesPrice = product.price >= 5000 && product.price <= 10000;
-    if (selectedPrice === "10000-30000")
+    } else if (selectedPrice === "10000-30000") {
       matchesPrice = product.price >= 10000 && product.price <= 30000;
-    if (selectedPrice === "30000-60000")
+    } else if (selectedPrice === "30000-60000") {
       matchesPrice = product.price >= 30000 && product.price <= 60000;
-    if (selectedPrice === "60000-100000")
+    } else if (selectedPrice === "60000-100000") {
       matchesPrice = product.price >= 60000 && product.price <= 100000;
-    if (selectedPrice === "over-100000") matchesPrice = product.price > 100000;
+    } else if (selectedPrice === "over-100000") {
+      matchesPrice = product.price > 100000;
+    }
 
     return matchesBrand && matchesPrice;
   });
 
-  const [sortBy, setSortBy] = useState("");
-
+  // Sort by
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === "za") return b.name.localeCompare(a.name);
-    if (sortBy === "low-high") return Number(a.price) - Number(b.price);
-    if (sortBy === "high-low") return Number(b.price) - Number(a.price);
-
-    return a.name.localeCompare(b.name);
+    if (sortBy === "za") {
+      return b.name.localeCompare(a.name);
+    } else if (sortBy === "low-high") {
+      return Number(a.price) - Number(b.price);
+    } else if (sortBy === "high-low") {
+      return Number(b.price) - Number(a.price);
+    } else {
+      return a.name.localeCompare(b.name);
+    }
   });
 
   return (
